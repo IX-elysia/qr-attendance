@@ -21,3 +21,4 @@ Click Export to download an Excel file `attendance.xlsx` of recorded entries.
 
 ## Deploy to production
 Push the repository to GitHub. Use a cloud host (Render, Railway, Heroku) to deploy the Node server (it serves the frontend too). Configure the service to install dependencies and run `npm start`.
+# qr-attendance
