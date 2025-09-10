@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QR Attendance</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- html5-qrcode CDN -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>QR Attendance</h1>
+      <p class="subtitle">Scan — Track — Export</p>
+    </header>
+
+    <nav class="tabs">
+      <button data-tab="scan" class="tab active">Scan</button>
+      <button data-tab="attendance" class="tab">Attendance</button>
+      <button data-tab="export" class="tab">Export</button>
+    </nav>
+
+    <main>
+      <section id="scan" class="panel active">
+        <div class="scanner-area">
+          <div id="qr-reader" style="width:100%"></div>
+        </div>
+        <div class="manual">
+          <label>Or enter name to test:</label>
+          <input id="manual-name" placeholder="Teacher name" />
+          <button id="manual-submit">Submit</button>
+        </div>
+        <div id="scan-status" class="status"></div>
+      </section>
+
+      <section id="attendance" class="panel">
+        <div class="controls">
+          <button id="refresh-list">Refresh</button>
+          <button id="clear-local">Clear Local</button>
+        </div>
+        <div id="list" class="list"></div>
+      </section>
+
+      <section id="export" class="panel">
+        <p>Click below to export current attendance to Excel.</p>
+        <button id="export-btn">Export to Excel</button>
+      </section>
+    </main>
+
+    <footer>Made with ❤️ — QR Attendance</footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
