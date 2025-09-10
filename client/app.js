@@ -8,13 +8,8 @@ tabs.forEach(t => t.addEventListener('click', () => {
   const name = t.dataset.tab;
   panels.forEach(p => p.classList.toggle('active', p.id === name));
 
-  if (name === "scan") {
-    // Start scanner when Scan tab is opened
-    startScanner();
-  } else {
-    // Stop scanner when leaving Scan tab
-    stopScanner();
-  }
+  // Only stop scanner when leaving Scan tab
+  if (name !== "scan") stopScanner();
 }));
 
 const statusEl = document.getElementById('scan-status');
@@ -68,6 +63,11 @@ function handleQrPayload(payload){
     }
   }).catch(err => showStatus('❌ Network error: '+err));
 }
+
+// Start Camera button
+document.getElementById('start-scan').addEventListener('click', () => {
+  startScanner();
+});
 
 // Manual submit
 document.getElementById('manual-submit').addEventListener('click', ()=>{

@@ -1,56 +1,47 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Attendance</title>
-  <link rel="stylesheet" href="style.css" />
-  <!-- html5-qrcode CDN -->
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <h1>QR Attendance</h1>
-      <p class="subtitle">Scan — Track — Export</p>
-    </header>
-
-    <nav class="tabs">
-      <button data-tab="scan" class="tab active">Scan</button>
-      <button data-tab="attendance" class="tab">Attendance</button>
-      <button data-tab="export" class="tab">Export</button>
+  <header>
+    <h1>QR Attendance System</h1>
+    <nav>
+      <button class="tab active" data-tab="scan">Scan</button>
+      <button class="tab" data-tab="attendance">Attendance</button>
+      <button class="tab" data-tab="export">Export</button>
     </nav>
+  </header>
 
-    <main>
-      <section id="scan" class="panel active">
-        <div class="scanner-area">
-          <div id="qr-reader" style="width:100%"></div>
-        </div>
-        <div class="manual">
-          <label>Or enter name to test:</label>
-          <input id="manual-name" placeholder="Teacher name" />
-          <button id="manual-submit">Submit</button>
-        </div>
-        <div id="scan-status" class="status"></div>
-      </section>
+  <main>
+    <!-- Scan Panel -->
+    <div id="scan" class="panel active">
+      <h2>Scan QR</h2>
+      <button id="start-scan">🎥 Start Camera</button>
+      <div id="qr-reader" style="width:300px;height:300px;margin-top:10px;"></div>
+      <div id="scan-status" class="status"></div>
+      <input id="manual-name" placeholder="Enter name manually">
+      <button id="manual-submit">Submit</button>
+    </div>
 
-      <section id="attendance" class="panel">
-        <div class="controls">
-          <button id="refresh-list">Refresh</button>
-          <button id="clear-local">Clear Local</button>
-        </div>
-        <div id="list" class="list"></div>
-      </section>
+    <!-- Attendance Panel -->
+    <div id="attendance" class="panel">
+      <h2>Attendance List</h2>
+      <div id="list"></div>
+      <button id="refresh-list">Refresh</button>
+      <button id="clear-local">Clear Display</button>
+    </div>
 
-      <section id="export" class="panel">
-        <p>Click below to export current attendance to Excel.</p>
-        <button id="export-btn">Export to Excel</button>
-      </section>
-    </main>
-
-    <footer>Made with ❤️ — QR Attendance</footer>
-  </div>
-
-  <script src="app.js"></script>
+    <!-- Export Panel -->
+    <div id="export" class="panel">
+      <h2>Export Data</h2>
+      <button id="export-btn">Download Excel</button>
+    </div>
+  </main>
 </body>
 </html>
