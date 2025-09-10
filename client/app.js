@@ -7,6 +7,14 @@ tabs.forEach(t => t.addEventListener('click', () => {
   t.classList.add('active');
   const name = t.dataset.tab;
   panels.forEach(p => p.classList.toggle('active', p.id === name));
+
+  if (name === "scan") {
+    // Start scanner when Scan tab is opened
+    startScanner();
+  } else {
+    // Stop scanner when leaving Scan tab
+    stopScanner();
+  }
 }));
 
 const statusEl = document.getElementById('scan-status');
@@ -16,39 +24,49 @@ let html5QrCode = null;
 function showStatus(msg){ statusEl.textContent = msg; }
 
 function startScanner(){
-  if (html5QrCode) return;
+  if (html5QrCode) return; // already running
+
   html5QrCode = new Html5Qrcode("qr-reader");
   const config = { fps: 10, qrbox: 250 };
-  html5QrCode.start({ facingMode: "environment" }, config, qrCodeMessage => {
-    handleQrPayload(qrCodeMessage);
-  }, errorMessage => {
-    // ignore frequent decode errors
+
+  html5QrCode.start({ facingMode: "environment" }, config,
+    qrCodeMessage => { handleQrPayload(qrCodeMessage); },
+    errorMessage => {}
+  ).then(() => {
+    showStatus("Camera ready — scan a QR code.");
   }).catch(err => {
-    showStatus('Camera start failed — check permissions or run on HTTPS. ' + err);
+    showStatus('Camera start failed — please allow permission. ' + err);
   });
 }
 
 function stopScanner(){
   if (!html5QrCode) return;
-  html5QrCode.stop().then(() => { html5QrCode.clear(); html5QrCode = null; qrRegion.innerHTML = ''; }).catch(()=>{});
+  html5QrCode.stop().then(() => {
+    html5QrCode.clear();
+    html5QrCode = null;
+    qrRegion.innerHTML = '';
+  }).catch(()=>{});
 }
 
 function handleQrPayload(payload){
   let data = { name: payload };
-  try{
+  try {
     const parsed = JSON.parse(payload);
     if (parsed && (parsed.name || parsed.id)) data = parsed;
-  }catch(e){}
+  } catch(e) {}
 
   fetch('/api/attendance', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: data.name, id: data.id })
   }).then(r => r.json()).then(j => {
     if (j.ok) {
-      showStatus(`Recorded: ${data.name} — ${new Date().toLocaleString()}`);
+      showStatus(`✅ Recorded: ${data.name} — ${new Date().toLocaleString()}`);
       refreshList();
-    } else showStatus('Failed to record: ' + (j.error || JSON.stringify(j)));
-  }).catch(err => showStatus('Network error: '+err));
+    } else {
+      showStatus('❌ Failed to record: ' + (j.error || JSON.stringify(j)));
+    }
+  }).catch(err => showStatus('❌ Network error: '+err));
 }
 
 // Manual submit
@@ -62,7 +80,7 @@ document.getElementById('manual-submit').addEventListener('click', ()=>{
 async function refreshList(){
   const listEl = document.getElementById('list');
   listEl.innerHTML = 'Loading...';
-  try{
+  try {
     const res = await fetch('/api/attendance');
     const arr = await res.json();
     if (!arr.length) listEl.innerHTML = '<div class="item">No records yet</div>';
@@ -74,7 +92,10 @@ async function refreshList(){
   }catch(e){ listEl.innerHTML = 'Could not load'; }
 }
 
-function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>\"']/g, c=> ({ '&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":\"&#39;\" })[c]); }
+function escapeHtml(s){
+  if(!s) return '';
+  return String(s).replace(/[&<>\"']/g, c=> ({ '&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;' })[c]);
+}
 
 // Export button
 document.getElementById('export-btn').addEventListener('click', ()=>{
@@ -89,8 +110,5 @@ document.getElementById('clear-local').addEventListener('click', ()=>{
   document.getElementById('list').innerHTML = '';
 });
 
-// Start scanner automatically
-const scanTab = document.querySelector('.tab[data-tab="scan"]');
-scanTab.addEventListener('click', ()=> setTimeout(startScanner, 300));
-window.addEventListener('load', ()=>{ startScanner(); refreshList(); });
-window.addEventListener('beforeunload', ()=>{ stopScanner(); });
+// Initialize attendance list only
+window.addEventListener('load', ()=> refreshList());
