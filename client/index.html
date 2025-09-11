@@ -1,52 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>QR Attendance System</title>
+
+  <!-- style -->
   <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <!-- html5-qrcode (deferred so DOM loads first) -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js" defer></script>
+
+  <!-- app logic -->
+  <script src="app.js" defer></script>
 </head>
 <body>
   <div class="container">
 
+    <!-- Header -->
+    <header class="topbar">
+      <h1 class="brand">📋 QR Attendance System</h1>
+    </header>
+
     <!-- Navigation Tabs -->
-    <nav class="tabs">
+    <nav class="tabs" role="navigation" aria-label="Main Tabs">
       <button class="tab-btn active" data-tab="scan">Scan</button>
       <button class="tab-btn" data-tab="attendance">Attendance</button>
       <button class="tab-btn" data-tab="export">Export</button>
     </nav>
 
-    <!-- Scan Section -->
-    <section id="scan" class="tab-content active">
+    <!-- SCAN tab content -->
+    <section id="scan" class="tab-content active" role="region" aria-label="Scan">
       <h2>Scan QR Code</h2>
-      <div id="qr-reader"></div>
-      <button id="start-camera" class="btn">Start Camera</button>
-      <h3>Manual Input</h3>
+
+      <!-- camera area (placeholder until camera starts) -->
+      <div id="reader" class="scanner-box">
+        <div class="placeholder">📷 Camera preview will appear here</div>
+      </div>
+
+      <div class="controls-row">
+        <button id="start-camera" class="btn primary">Start Camera</button>
+        <div id="scan-result" class="result-message" aria-live="polite"></div>
+      </div>
+
+      <!-- Manual Input -->
       <div class="manual-input">
-        <input type="text" id="manual-name" placeholder="Enter name">
-        <button id="manual-add" class="btn">Add</button>
+        <input id="manual-name" type="text" placeholder="Enter name (manual)" />
+        <button id="manual-add" class="btn primary">Add</button>
       </div>
     </section>
 
-    <!-- Attendance Section -->
-    <section id="attendance" class="tab-content">
+    <!-- ATTENDANCE tab content -->
+    <section id="attendance" class="tab-content" role="region" aria-label="Attendance">
       <h2>Attendance List</h2>
-      <ul id="attendance-list">
-        <li>No attendance recorded yet</li>
+
+      <div class="attendance-actions">
+        <button id="refresh-list" class="btn">🔄 Refresh</button>
+        <button id="clear-attendance" class="btn danger">🗑 Clear</button>
+      </div>
+
+      <ul id="attendance-list" class="attendance-list">
+        <li class="empty">No attendance recorded yet</li>
       </ul>
-      <button id="clear-attendance" class="btn btn-danger">Clear Attendance</button>
     </section>
 
-    <!-- Export Section -->
-    <section id="export" class="tab-content">
+    <!-- EXPORT tab content -->
+    <section id="export" class="tab-content" role="region" aria-label="Export">
       <h2>Export Data</h2>
-      <p>You can download all recorded attendance in Excel format.</p>
-      <button id="export-excel" class="btn">Export to Excel</button>
+      <div class="export-card">
+        <p>Download all recorded attendance as an Excel file (Name / Date / Time).</p>
+        <div class="export-actions">
+          <button id="export-excel" class="btn primary">Export to Excel</button>
+        </div>
+      </div>
     </section>
 
   </div>
-
-  <script src="script.js"></script>
 </body>
 </html>

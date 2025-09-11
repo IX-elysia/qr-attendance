@@ -1,122 +1,191 @@
-let html5QrCode;
-let isCameraRunning = false;
+/* frontend logic: tabs, camera, manual add, attendance list, export */
+document.addEventListener("DOMContentLoaded", () => {
+  // --- elements ---
+  const tabButtons = document.querySelectorAll(".tab-btn");
+  const tabContents = document.querySelectorAll(".tab-content");
+  const readerEl = document.getElementById("reader");
+  const startBtn = document.getElementById("start-camera");
+  const resultBox = document.getElementById("scan-result");
+  const manualInput = document.getElementById("manual-name");
+  const manualAdd = document.getElementById("manual-add");
+  const attendanceListEl = document.getElementById("attendance-list");
+  const refreshBtn = document.getElementById("refresh-list");
+  const clearBtn = document.getElementById("clear-attendance");
+  const exportBtn = document.getElementById("export-excel");
 
-// Show selected tab
-function showTab(tabId) {
-  document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
-  document.getElementById(tabId).classList.remove('hidden');
+  // state
+  let html5QrCode = null;
+  let isCameraRunning = false;
 
-  if (tabId === "attendance") {
-    fetchAttendance();
-  }
-}
-
-// Start/Stop camera
-document.getElementById("start-camera").addEventListener("click", () => {
-  if (!isCameraRunning) {
-    startScanner();
-  } else {
-    stopScanner();
-  }
-});
-
-function startScanner() {
-  html5QrCode = new Html5Qrcode("reader");
-
-  html5QrCode.start(
-    { facingMode: "environment" },
-    { fps: 10, qrbox: 250 },
-    qrCodeMessage => {
-      recordAttendance(qrCodeMessage);
-      stopScanner();
-    }
-  ).then(() => {
-    isCameraRunning = true;
-    document.getElementById("start-camera").innerText = "Stop Camera";
-  }).catch(err => {
-    console.error("Camera start failed:", err);
+  // --- tab switching ---
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.tab;
+      // set active tab button
+      tabButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      // show right panel
+      tabContents.forEach(c => c.classList.remove("active"));
+      document.getElementById(target).classList.add("active");
+      // if leaving scan tab, stop camera
+      if (target !== "scan" && isCameraRunning) {
+        stopScanner();
+      }
+      // auto-refresh attendance when opening attendance tab
+      if (target === "attendance") refreshList();
+    });
   });
-}
 
-function stopScanner() {
-  if (html5QrCode) {
-    html5QrCode.stop().then(() => {
-      isCameraRunning = false;
-      document.getElementById("start-camera").innerText = "Start Camera";
+  // set reader placeholder (when no camera active)
+  function setReaderPlaceholder() {
+    readerEl.innerHTML = '<div class="placeholder">📷 Camera preview will appear here</div>';
+  }
+  setReaderPlaceholder();
+
+  // --- camera functions ---
+  function startScanner() {
+    if (isCameraRunning) return;
+    // clear placeholder before attaching camera
+    readerEl.innerHTML = "";
+    html5QrCode = new Html5Qrcode("reader");
+    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+    html5QrCode.start(
+      { facingMode: "environment" },
+      config,
+      (decodedText, decodedResult) => {
+        // on success
+        recordAttendance(decodedText);
+        // stop after one scan to avoid duplicates
+        stopScanner();
+      },
+      (error) => {
+        // scan failure callback (ignored)
+      }
+    ).then(() => {
+      isCameraRunning = true;
+      startBtn.innerText = "Stop Camera";
+      resultBox.textContent = "";
+    }).catch(err => {
+      console.error("Camera start failed:", err);
+      resultBox.textContent = "⚠️ Camera permission or device issue.";
+      setReaderPlaceholder();
     });
   }
-}
 
-// Record attendance (QR + Manual)
-function recordAttendance(name) {
-  fetch("/attendance", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name })
-  })
-  .then(res => res.json())
-  .then(data => {
-    const resultBox = document.getElementById("scan-result");
-    resultBox.textContent = `✅ ${data.name} recorded at ${data.date} ${data.time}`;
-    fetchAttendance();
-  });
-}
-
-// Manual input
-function addManual() {
-  const input = document.getElementById("manual-name");
-  const name = input.value.trim();
-  if (name) {
-    recordAttendance(name);
-    input.value = "";
+  function stopScanner() {
+    if (!html5QrCode || !isCameraRunning) {
+      isCameraRunning = false;
+      startBtn.innerText = "Start Camera";
+      setReaderPlaceholder();
+      return;
+    }
+    html5QrCode.stop().then(() => {
+      html5QrCode.clear();
+      html5QrCode = null;
+      isCameraRunning = false;
+      startBtn.innerText = "Start Camera";
+      setReaderPlaceholder();
+    }).catch(err => {
+      console.warn("Error stopping scanner:", err);
+      // reset anyway
+      html5QrCode = null;
+      isCameraRunning = false;
+      startBtn.innerText = "Start Camera";
+      setReaderPlaceholder();
+    });
   }
-}
 
-// Fetch attendance
-function fetchAttendance() {
-  fetch("/attendance")
-    .then(res => res.json())
+  // toggle camera on button
+  startBtn.addEventListener("click", () => {
+    if (!isCameraRunning) startScanner();
+    else stopScanner();
+  });
+
+  // --- attendance / server interactions ---
+  // POST a name to server, show server response (server gives date/time)
+  function recordAttendance(name) {
+    if (!name || !name.trim()) return;
+    fetch("/attendance", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: name.trim() })
+    })
+    .then(r => r.json())
     .then(data => {
-      const list = document.getElementById("attendance-list");
-      list.innerHTML = "";
-      if (data.length === 0) {
-        list.innerHTML = "<li style='color: #aaa;'>No attendance recorded yet</li>";
-      } else {
+      // show server-confirmed text
+      resultBox.textContent = `✅ ${data.name} recorded at ${data.date} ${data.time}`;
+      refreshList(); // update UI immediately
+    })
+    .catch(err => {
+      console.error("Record failed:", err);
+      resultBox.textContent = "⚠️ Could not record attendance (network).";
+    });
+  }
+
+  // manual add button
+  manualAdd.addEventListener("click", () => {
+    const val = manualInput.value.trim();
+    if (!val) return;
+    recordAttendance(val);
+    manualInput.value = "";
+  });
+
+  // fetch attendance list and render
+  function refreshList() {
+    fetch("/attendance")
+      .then(r => r.json())
+      .then(data => {
+        attendanceListEl.innerHTML = "";
+        if (!data || data.length === 0) {
+          const li = document.createElement("li");
+          li.className = "empty";
+          li.textContent = "No attendance recorded yet";
+          attendanceListEl.appendChild(li);
+          return;
+        }
         data.forEach(entry => {
           const li = document.createElement("li");
-          li.textContent = `${entry.name} – ${entry.date} ${entry.time}`;
-          list.appendChild(li);
+          li.textContent = `${entry.name} — ${entry.date} ${entry.time}`;
+          attendanceListEl.appendChild(li);
         });
-      }
-    });
-}
+      })
+      .catch(err => {
+        console.error("Fetch attendance failed:", err);
+        attendanceListEl.innerHTML = "<li class='empty'>Could not load attendance</li>";
+      });
+  }
 
-// Clear attendance
-function clearAttendance() {
-  fetch("/attendance", { method: "DELETE" })
-    .then(() => fetchAttendance());
-}
+  // clear attendance
+  clearBtn.addEventListener("click", () => {
+    if (!confirm("Clear all attendance records?")) return;
+    fetch("/attendance", { method: "DELETE" })
+      .then(() => {
+        refreshList();
+        resultBox.textContent = "🗑️ Attendance cleared";
+      })
+      .catch(err => {
+        console.error("Clear failed:", err);
+        resultBox.textContent = "⚠️ Could not clear attendance";
+      });
+  });
 
-// Export Excel
-function exportExcel() {
-  window.location.href = "/export";
-}
+  // refresh button
+  refreshBtn.addEventListener("click", refreshList);
 
-// Default tab
-showTab("scan");
+  // export button
+  exportBtn.addEventListener("click", () => {
+    // navigate to backend export route (server serves the file)
+    window.location.href = "/export";
+  });
 
-// TAB SWITCHING
-const tabButtons = document.querySelectorAll(".tab-btn");
-const tabContents = document.querySelectorAll(".tab-content");
+  // load initial attendance (so Attendance tab has up-to-date data)
+  refreshList();
 
-tabButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    // Remove active class from all
-    tabButtons.forEach(btn => btn.classList.remove("active"));
-    tabContents.forEach(content => content.classList.remove("active"));
-
-    // Add active class to clicked tab + corresponding section
-    button.classList.add("active");
-    document.getElementById(button.dataset.tab).classList.add("active");
+  // stop camera when window/tab is hidden (optional safety)
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && isCameraRunning) {
+      stopScanner();
+    }
   });
 });
