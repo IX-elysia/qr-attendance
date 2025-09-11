@@ -1,56 +1,62 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
 const fs = require("fs");
-const xlsx = require("xlsx");
 const path = require("path");
-
 const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+const PORT = process.env.PORT || 5000;
 
-// Serve static files from client/
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "client")));
 
 let attendance = [];
-const FILE = "attendance.json";
 
-// Load saved attendance
-if (fs.existsSync(FILE)) {
-  attendance = JSON.parse(fs.readFileSync(FILE));
+// Load existing attendance
+if (fs.existsSync("attendance.json")) {
+  attendance = JSON.parse(fs.readFileSync("attendance.json"));
 }
 
-// Get attendance
+// Record attendance
+app.post("/attendance", (req, res) => {
+  const { name } = req.body;
+  const now = new Date();
+  const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  attendance.push({ name, time });
+  fs.writeFileSync("attendance.json", JSON.stringify(attendance));
+  res.json({ message: "Attendance recorded", name, time });
+});
+
+// Get attendance list
 app.get("/attendance", (req, res) => {
   res.json(attendance);
 });
 
-// Add name
-app.post("/attendance", (req, res) => {
-  const { name } = req.body;
-  if (name && !attendance.includes(name)) {
-    attendance.push(name);
-    fs.writeFileSync(FILE, JSON.stringify(attendance));
-  }
-  res.json({ success: true });
+// Clear attendance
+app.delete("/attendance", (req, res) => {
+  attendance = [];
+  fs.writeFileSync("attendance.json", JSON.stringify(attendance));
+  res.json({ message: "Attendance cleared" });
 });
 
-// Export Excel
+// Export attendance to Excel
 app.get("/export", (req, res) => {
-  const wb = xlsx.utils.book_new();
-  const ws = xlsx.utils.aoa_to_sheet([["Name"], ...attendance.map(n => [n])]);
-  xlsx.utils.book_append_sheet(wb, ws, "Attendance");
+  const ExcelJS = require("exceljs");
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet("Attendance");
 
-  const buffer = xlsx.write(wb, { type: "buffer", bookType: "xlsx" });
-  res.setHeader("Content-Disposition", "attachment; filename=attendance.xlsx");
+  sheet.columns = [
+    { header: "Name", key: "name", width: 30 },
+    { header: "Time", key: "time", width: 20 }
+  ];
+
+  sheet.addRows(attendance);
+
   res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-  res.send(buffer);
+  res.setHeader("Content-Disposition", "attachment; filename=attendance.xlsx");
+
+  workbook.xlsx.write(res).then(() => res.end());
 });
 
-// ✅ Serve index.html for root
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/index.html"));
+// Start server
+app.listen(PORT, () => {
+  console.log(`✅ Server running at http://localhost:${PORT}`);
 });
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

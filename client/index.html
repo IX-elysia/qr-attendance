@@ -33,6 +33,10 @@
     <!-- Attendance tab -->
     <section id="attendance" class="tab hidden">
       <h2>Attendance List</h2>
+      <div class="attendance-actions">
+        <button onclick="fetchAttendance()">🔄 Refresh</button>
+        <button onclick="clearAttendance()">🗑 Clear</button>
+      </div>
       <ul id="attendance-list"></ul>
     </section>
 

@@ -33,7 +33,7 @@ function startScanner() {
         body: JSON.stringify({ name: qrCodeMessage })
       });
 
-      // ✅ Show success message instead of alert
+      // ✅ Show success message
       const resultBox = document.getElementById("scan-result");
       resultBox.textContent = `✅ Attendance recorded for ${qrCodeMessage}`;
 
@@ -63,12 +63,22 @@ function fetchAttendance() {
     .then(data => {
       const list = document.getElementById("attendance-list");
       list.innerHTML = "";
-      data.forEach(name => {
-        const li = document.createElement("li");
-        li.textContent = name;
-        list.appendChild(li);
-      });
+      if (data.length === 0) {
+        list.innerHTML = "<li style='color: #aaa;'>No attendance recorded yet</li>";
+      } else {
+        data.forEach(name => {
+          const li = document.createElement("li");
+          li.textContent = name;
+          list.appendChild(li);
+        });
+      }
     });
+}
+
+// Clear attendance list
+function clearAttendance() {
+  fetch("/attendance", { method: "DELETE" })
+    .then(() => fetchAttendance());
 }
 
 // Export to Excel
