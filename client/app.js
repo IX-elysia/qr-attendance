@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isCameraRunning) return;
     // clear placeholder before attaching camera
     readerEl.innerHTML = "";
-    html5QrCode = new Html5Qrcode("reader");
+    html5QrCode = new html5QrCode("reader");
     const config = { fps: 10, qrbox: { width: 250, height: 250 } };
 
     html5QrCode.start(
