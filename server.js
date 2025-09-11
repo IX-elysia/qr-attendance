@@ -9,13 +9,13 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Serve static files
-app.use(express.static(path.join(__dirname, "../client")));
+// Serve static files from client/
+app.use(express.static(path.join(__dirname, "client")));
 
 let attendance = [];
 const FILE = "attendance.json";
 
-// Load saved attendance if file exists
+// Load saved attendance
 if (fs.existsSync(FILE)) {
   attendance = JSON.parse(fs.readFileSync(FILE));
 }
@@ -25,7 +25,7 @@ app.get("/attendance", (req, res) => {
   res.json(attendance);
 });
 
-// Add new attendee
+// Add name
 app.post("/attendance", (req, res) => {
   const { name } = req.body;
   if (name && !attendance.includes(name)) {
@@ -42,15 +42,14 @@ app.get("/export", (req, res) => {
   xlsx.utils.book_append_sheet(wb, ws, "Attendance");
 
   const buffer = xlsx.write(wb, { type: "buffer", bookType: "xlsx" });
-
   res.setHeader("Content-Disposition", "attachment; filename=attendance.xlsx");
   res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
   res.send(buffer);
 });
 
-// ✅ Serve index.html at root
+// ✅ Serve index.html for root
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/index.html"));
+  res.sendFile(path.join(__dirname, "client/index.html"));
 });
 
 const PORT = process.env.PORT || 3000;
