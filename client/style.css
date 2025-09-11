@@ -1,110 +1,72 @@
 body {
   font-family: Arial, sans-serif;
-  background: #fff;
-  color: #333;
-  text-align: center;
   margin: 0;
-  padding: 0;
+  background: #f9f9f9;
+  color: #333;
 }
 
 header {
   background: maroon;
   color: white;
+  text-align: center;
   padding: 1rem;
   font-size: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
   position: sticky;
   top: 0;
-  z-index: 1000;
-}
-
-nav {
-  margin: 1rem;
-}
-
-nav button {
-  background: maroon;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  margin: 0 5px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-nav button:hover {
-  background: #a00000;
+  z-index: 10;
 }
 
 main {
-  max-width: 600px;
-  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.card {
+  background: white;
   padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  text-align: center;
 }
 
-main section {
-  display: none;
+button {
+  background: maroon;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  margin: 0.3rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
-main section.active {
-  display: block;
+button:hover {
+  background: #a00000;
 }
 
+/* QR Reader */
 #qr-reader {
-  width: 300px;
-  height: 300px;
+  width: 320px;
+  height: 320px;
   margin: 1rem auto;
   border: 2px solid maroon;
   border-radius: 12px;
-  background: #f8f8f8;
+  background: #000;
   overflow: hidden;
+  position: relative;
 }
 
-#manual-entry {
-  margin-top: 1rem;
-}
-
-#manual-entry input {
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-#manual-entry button {
-  background: maroon;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  margin-left: 5px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-#attendance-list {
-  text-align: left;
-  margin-top: 1rem;
-}
-
-#qr-container {
-  margin-top: 1rem;
+#qr-reader video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 #qrcode {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-#download-qr {
-  background: maroon;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-#download-qr:hover {
-  background: #a00000;
+  margin-top: 1rem;
 }

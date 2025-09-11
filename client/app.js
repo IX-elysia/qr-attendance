@@ -1,114 +1,111 @@
+const startBtn = document.getElementById("startBtn");
+const stopBtn = document.getElementById("stopBtn");
+const manualAddBtn = document.getElementById("manualAdd");
+const refreshBtn = document.getElementById("refreshBtn");
+const clearBtn = document.getElementById("clearBtn");
+const exportBtn = document.getElementById("exportBtn");
+const generateBtn = document.getElementById("generateBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+
+const attendanceList = document.getElementById("attendanceList");
+const qrcodeDiv = document.getElementById("qrcode");
+
 let html5QrCode;
 
-// Switch between tabs
-function showSection(id) {
-  document.querySelectorAll("main section").forEach(sec => sec.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+// Load attendance
+async function loadAttendance() {
+  const res = await fetch("/attendance");
+  const data = await res.json();
+  attendanceList.innerHTML = "";
+  data.forEach(entry => {
+    const li = document.createElement("li");
+    li.textContent = `${entry.name} - ${entry.date} ${entry.time}`;
+    attendanceList.appendChild(li);
+  });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const startBtn = document.getElementById("start-camera");
-  const stopBtn = document.getElementById("stop-camera");
-  const qrReader = document.getElementById("qr-reader");
-  const attendanceList = document.getElementById("attendance-list");
-  const addManualBtn = document.getElementById("add-manual");
-  const clearBtn = document.getElementById("clear-attendance");
-  const exportBtn = document.getElementById("export-btn");
-  const generateBtn = document.getElementById("generate-qr");
-  const qrcodeDiv = document.getElementById("qrcode");
-  const downloadBtn = document.getElementById("download-qr");
-
-  // Start Camera
-  startBtn.addEventListener("click", () => {
-    if (!html5QrCode) {
-      html5QrCode = new Html5Qrcode("qr-reader");
-    }
-    html5QrCode.start(
-      { facingMode: "environment" },
-      { fps: 10, qrbox: { width: 300, height: 300 } },
-      (decodedText) => {
-        addAttendance(decodedText);
-      },
-      (err) => {
-        console.warn(err);
-      }
-    ).catch(err => console.error("Camera start failed:", err));
+// Add attendance
+async function addAttendance(name) {
+  const res = await fetch("/attendance", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name })
   });
+  if (res.ok) loadAttendance();
+}
 
-  // Stop Camera
-  stopBtn.addEventListener("click", () => {
-    if (html5QrCode) {
-      html5QrCode.stop().then(() => {
-        console.log("Camera stopped");
-      }).catch(err => console.error("Stop failed", err));
-    }
-  });
+// Clear attendance
+clearBtn.addEventListener("click", async () => {
+  await fetch("/attendance", { method: "DELETE" });
+  loadAttendance();
+});
 
-  // Add Manual Attendance
-  addManualBtn.addEventListener("click", () => {
-    const name = document.getElementById("manual-name").value.trim();
-    if (name) {
-      addAttendance(name);
-      document.getElementById("manual-name").value = "";
-    }
-  });
+// Refresh
+refreshBtn.addEventListener("click", loadAttendance);
 
-  // Clear Attendance
-  clearBtn.addEventListener("click", () => {
-    attendanceList.innerHTML = "";
-  });
+// Manual add
+manualAddBtn.addEventListener("click", () => {
+  const name = document.getElementById("manualName").value.trim();
+  if (name) addAttendance(name);
+});
 
-  // Export Attendance
-  exportBtn.addEventListener("click", () => {
-    const rows = [];
-    document.querySelectorAll("#attendance-list li").forEach(li => rows.push([li.textContent]));
-    if (rows.length === 0) {
-      alert("No attendance data to export!");
-      return;
-    }
-    let csvContent = "data:text/csv;charset=utf-8," 
-      + rows.map(e => e.join(",")).join("\n");
-    const link = document.createElement("a");
-    link.setAttribute("href", encodeURI(csvContent));
-    link.setAttribute("download", "attendance.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  });
+// Export (Excel)
+exportBtn.addEventListener("click", () => {
+  window.location.href = "/export";
+});
 
-  // Generate QR
-  generateBtn.addEventListener("click", () => {
-    const text = document.getElementById("qr-input").value.trim();
-    if (!text) {
-      alert("Enter a name to generate QR");
-      return;
-    }
-    qrcodeDiv.innerHTML = "";
-    new QRCode(qrcodeDiv, {
-      text: text,
-      width: 200,
-      height: 200
-    });
-    downloadBtn.style.display = "inline-block";
+// Start Camera
+startBtn.addEventListener("click", () => {
+  if (!html5QrCode) {
+    html5QrCode = new Html5Qrcode("qr-reader");
+  }
+  html5QrCode.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: { width: 250, height: 250 } },
+    decodedText => addAttendance(decodedText),
+    err => console.warn(err)
+  ).catch(err => console.error("Camera start failed:", err));
+});
 
-    // Prepare download link
-    setTimeout(() => {
-      const qrCanvas = qrcodeDiv.querySelector("canvas");
-      if (qrCanvas) {
-        downloadBtn.onclick = () => {
-          const link = document.createElement("a");
-          link.download = `${text}_qr.png`;
-          link.href = qrCanvas.toDataURL();
-          link.click();
-        };
-      }
-    }, 500);
-  });
-
-  // Add to Attendance List
-  function addAttendance(name) {
-    const li = document.createElement("li");
-    li.textContent = `${name} — ${new Date().toLocaleString()}`;
-    attendanceList.appendChild(li);
+// Stop Camera
+stopBtn.addEventListener("click", () => {
+  if (html5QrCode) {
+    html5QrCode.stop().then(() => {
+      console.log("Camera stopped");
+    }).catch(err => console.error("Stop failed:", err));
   }
 });
+
+// Generate QR
+generateBtn.addEventListener("click", () => {
+  const text = document.getElementById("qr-input").value.trim();
+  if (!text) {
+    alert("Enter a name to generate QR");
+    return;
+  }
+  qrcodeDiv.innerHTML = "";
+  new QRCode(qrcodeDiv, {
+    text: text,
+    width: 200,
+    height: 200,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+  downloadBtn.style.display = "inline-block";
+
+  setTimeout(() => {
+    const qrCanvas = qrcodeDiv.querySelector("canvas");
+    if (qrCanvas) {
+      downloadBtn.onclick = () => {
+        const link = document.createElement("a");
+        link.download = `${text}_qr.png`;
+        link.href = qrCanvas.toDataURL("image/png");
+        link.click();
+      };
+    }
+  }, 500);
+});
+
+// Initial load
+loadAttendance();
