@@ -1,5 +1,5 @@
-/* General reset */
-body, h1, h2, ul, li {
+/* Reset */
+body, h1, h2, ul, li, p {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -49,12 +49,40 @@ nav button:hover {
   display: none;
 }
 
+/* Attendance list */
 #attendance-list {
   list-style: none;
   margin-top: 1rem;
+  padding: 0;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #attendance-list li {
   padding: 0.5rem;
   border-bottom: 1px solid #ddd;
+}
+
+/* Export button */
+.export-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: maroon;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.export-btn:hover {
+  background-color: #800000;
+}
+
+/* Success message */
+.success-message {
+  margin-top: 1rem;
+  color: green;
+  font-weight: bold;
 }

@@ -32,7 +32,11 @@ function startScanner() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: qrCodeMessage })
       });
-      alert("Scanned: " + qrCodeMessage);
+
+      // ✅ Show success message instead of alert
+      const resultBox = document.getElementById("scan-result");
+      resultBox.textContent = `✅ Attendance recorded for ${qrCodeMessage}`;
+
       stopScanner();
     }
   ).then(() => {
