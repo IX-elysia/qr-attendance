@@ -1,192 +1,35 @@
-/* ===== global ===== */
-:root {
-  --maroon: #800000;
-  --maroon-dark: #5c0000;
-  --muted: #666;
-  --card-bg: #ffffff;
-}
-
-* { box-sizing: border-box; }
 body {
-  margin: 0;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background: #faf9f8;
-  color: #222;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* container */
-.container {
-  max-width: 760px;
-  margin: 18px auto;
-  padding: 0 18px 40px;
-}
-
-/* header */
-.topbar {
-  background: var(--maroon);
-  color: white;
-  padding: 18px 20px;
-  border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #333;
   text-align: center;
 }
-.brand {
-  margin: 0;
-  font-size: 1.3rem;
-  letter-spacing: 0.6px;
-}
 
-/* tabs nav */
-.tabs {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 18px;
-}
-.tab-btn {
-  background: transparent;
-  border: 2px solid var(--maroon);
-  color: var(--maroon);
-  padding: 8px 16px;
-  border-radius: 24px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform .14s ease, background-color .14s ease, color .14s ease;
-}
-.tab-btn.active {
-  background: linear-gradient(180deg, var(--maroon), var(--maroon-dark));
+header {
+  background: maroon;
   color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(128,0,0,0.18);
+  padding: 1rem;
 }
 
-/* tab content */
-.tab-content {
-  display: none;
-  margin-top: 18px;
-  background: var(--card-bg);
-  border: 1px solid rgba(0,0,0,0.04);
-  border-radius: 12px;
-  padding: 18px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
-}
-.tab-content.active { display: block; }
-
-h2 {
-  margin: 0 0 12px 0;
-  color: var(--maroon);
-  font-size: 1.05rem;
-  display: inline-block;
-  padding-bottom: 6px;
-  border-bottom: 3px solid var(--maroon);
+nav {
+  margin: 1rem;
 }
 
-/* scanner box */
-.scanner-box {
-  width: 100%;
-  height: 320px;
-  border-radius: 12px;
-  border: 3px solid var(--maroon);
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-.scanner-box .placeholder {
-  color: #bdbdbd;
-  font-size: 1.05rem;
-}
-
-/* controls row */
-.controls-row {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-}
-.result-message {
-  font-weight: 700;
-  color: green;
-  min-width: 220px;
-  text-align: left;
-}
-
-/* manual input */
-.manual-input {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 12px;
-}
-.manual-input input {
-  width: 60%;
-  padding: 10px 12px;
-  border-radius: 999px;
-  border: 2px solid #ddd;
-  outline: none;
-}
-.manual-input input:focus {
-  border-color: var(--maroon);
-  box-shadow: 0 4px 12px rgba(128,0,0,0.08);
-}
-
-/* buttons */
-.btn {
-  padding: 10px 16px;
-  border-radius: 999px;
+nav button {
+  background: maroon;
+  color: white;
   border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 5px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 700;
-  transition: transform .12s ease, box-shadow .12s ease;
-}
-.btn.primary {
-  background: var(--maroon);
-  color: white;
-  box-shadow: 0 6px 14px rgba(128,0,0,0.12);
-}
-.btn.primary:hover { transform: translateY(-2px); background: var(--maroon-dark); }
-.btn.danger {
-  background: #c33;
-  color: white;
-  box-shadow: 0 6px 14px rgba(195,0,0,0.1);
 }
 
-/* attendance list */
-.attendance-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 12px;
+main section {
+  display: none;
+  margin-top: 2rem;
 }
-.attendance-list {
-  list-style: none;
-  padding: 0;
-  max-width: 640px;
-  margin: 0 auto;
-}
-.attendance-list li {
-  text-align: left;
-  padding: 10px 14px;
-  margin: 6px 0;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.04);
-  border-left: 6px solid rgba(128,0,0,0.06);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-.attendance-list li.empty { color: #999; text-align: center; border-left: 6px solid transparent; }
 
-/* export card */
-.export-card {
-  max-width: 560px;
-  margin: 0 auto;
-  padding: 14px;
-  border-radius: 8px;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.04);
-  text-align: center;
+main section.active {
+  display: block;
 }

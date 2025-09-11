@@ -1,83 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>QR Attendance System</title>
-
-  <!-- style -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Attendance</title>
   <link rel="stylesheet" href="style.css">
-
-  <!-- html5-qrcode (deferred so DOM loads first) -->
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js" defer></script>
-
-  <!-- app logic -->
-  <script src="app.js" defer></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body>
-  <div class="container">
+  <header>
+    <h1>📷 QR Attendance</h1>
+  </header>
 
-    <!-- Header -->
-    <header class="topbar">
-      <h1 class="brand">QGHS Teacher Attendance</h1>
-    </header>
+  <nav>
+    <button onclick="showSection('scan')">Scan</button>
+    <button onclick="showSection('attendance')">Attendance</button>
+    <button onclick="showSection('export')">Export</button>
+  </nav>
 
-    <!-- Navigation Tabs -->
-    <nav class="tabs" role="navigation" aria-label="Main Tabs">
-      <button class="tab-btn active" data-tab="scan">Scan</button>
-      <button class="tab-btn" data-tab="attendance">Attendance</button>
-      <button class="tab-btn" data-tab="export">Export</button>
-    </nav>
-
-    <!-- SCAN tab content -->
-    <section id="scan" class="tab-content active" role="region" aria-label="Scan">
+  <main>
+    <section id="scan" class="active">
       <h2>Scan QR Code</h2>
-
-      <!-- camera area (placeholder until camera starts) -->
-      <div id="reader" class="scanner-box">
-        <div class="placeholder">📷 Camera preview will appear here</div>
-      </div>
-
-      <div class="controls-row">
-        <button id="start-camera" class="btn primary">Start Camera</button>
-        <div id="scan-result" class="result-message" aria-live="polite"></div>
-      </div>
-
-      <!-- Manual Input -->
-      <div class="manual-input">
-        <input id="manual-name" type="text" placeholder="Enter name (manual)" />
-        <button id="manual-add" class="btn primary">Add</button>
-      </div>
+      <button id="start-camera">Start Camera</button>
+      <div id="qr-reader" style="width:300px; height:300px; margin:auto; border:2px solid maroon; border-radius:10px;"></div>
     </section>
 
-    <!-- ATTENDANCE tab content -->
-    <section id="attendance" class="tab-content" role="region" aria-label="Attendance">
+    <section id="attendance">
       <h2>Attendance List</h2>
-
-      <div class="attendance-actions">
-        <button id="refresh-list" class="btn">🔄 Refresh</button>
-        <button id="clear-attendance" class="btn danger">🗑 Clear</button>
-      </div>
-
-      <ul id="attendance-list" class="attendance-list">
-        <li class="empty">No attendance recorded yet</li>
-      </ul>
+      <ul id="attendance-list"></ul>
     </section>
 
-    <!-- EXPORT tab content -->
-    <section id="export" class="tab-content" role="region" aria-label="Export">
-      <h2>Export Data</h2>
-      <div class="export-card">
-        <p>Download all recorded attendance as an Excel file (Name / Date / Time).</p>
-        <div class="export-actions">
-          <button id="export-excel" class="btn primary">Export to Excel</button>
-        </div>
-      </div>
+    <section id="export">
+      <h2>Export Attendance</h2>
+      <button id="export-btn">Export to Excel</button>
     </section>
+  </main>
 
-  </div>
-
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <script src="app.js"></script>
 </body>
 </html>
