@@ -64,7 +64,16 @@ nav button:hover {
   border-bottom: 1px solid #ddd;
 }
 
-/* Export button */
+/* Export section */
+.export-card {
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border: 2px solid maroon;
+  border-radius: 12px;
+  max-width: 300px;
+  background: #fafafa;
+}
+
 .export-btn {
   margin-top: 1rem;
   padding: 0.5rem 1rem;

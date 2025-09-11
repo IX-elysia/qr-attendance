@@ -9,10 +9,11 @@
 </head>
 <body>
   <header>
-    <h1>QGHS Attendance for Teachers</h1>
+    <h1>📋 QR Attendance System</h1>
     <nav>
       <button onclick="showTab('scan')">Scan</button>
       <button onclick="showTab('attendance')">Attendance</button>
+      <button onclick="showTab('export')">Export</button>
     </nav>
   </header>
 
@@ -21,15 +22,27 @@
     <section id="scan" class="tab">
       <h2>Scan QR Code</h2>
       <button id="start-camera">Start Camera</button>
-      <div id="reader" style="width: 300px; margin: 20px auto;"></div>
+      <div id="reader-container">
+        <div id="reader" style="width: 300px; height: 250px; margin: 20px auto; border: 2px dashed maroon; display: flex; align-items: center; justify-content: center;">
+          <p style="color: #aaa;">📷 Camera preview will appear here</p>
+        </div>
+      </div>
       <p id="scan-result" class="success-message"></p>
-      <button onclick="exportExcel()" class="export-btn">Export to Excel</button>
     </section>
 
     <!-- Attendance tab -->
     <section id="attendance" class="tab hidden">
       <h2>Attendance List</h2>
       <ul id="attendance-list"></ul>
+    </section>
+
+    <!-- Export tab -->
+    <section id="export" class="tab hidden">
+      <h2>Export Attendance</h2>
+      <div class="export-card">
+        <p>Download the attendance list as an Excel file.</p>
+        <button onclick="exportExcel()" class="export-btn">Download Excel</button>
+      </div>
     </section>
   </main>
 
