@@ -1,75 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
   <title>QR Attendance</title>
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Scanner and generator libraries -->
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" defer></script>
-
-  <!-- App logic -->
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 </head>
 <body>
   <header>
     <h1>QR Attendance System</h1>
     <nav>
-      <button class="tab active" data-tab="scan">Scan</button>
-      <button class="tab" data-tab="attendance">Attendance</button>
-      <button class="tab" data-tab="export">Export</button>
-      <button class="tab" data-tab="generate">Generate QR</button>
+      <button class="tablink" data-tab="scan">📷 Scan</button>
+      <button class="tablink" data-tab="attendance">📝 Attendance</button>
+      <button class="tablink" data-tab="export">⬇️ Export</button>
     </nav>
   </header>
 
   <main>
-    <!-- SCAN -->
-    <section id="scan" class="panel active">
-      <h2>Scan QR</h2>
+    <!-- Scan Tab -->
+    <section id="scan" class="tab-content active">
+      <h2>Scan QR Code</h2>
       <button id="start-scan">🎥 Start Camera</button>
-      <div id="qr-reader" style="width:320px;height:320px;margin:12px auto;"></div>
-      <div id="scan-status" class="status"></div>
-
-      <div class="manual">
-        <input id="manual-name" placeholder="Enter name manually" />
-        <button id="manual-submit">Submit</button>
-      </div>
+      <p id="scan-status"></p>
+      <div id="qr-reader" style="width: 300px; margin: 0 auto;"></div>
     </section>
 
-    <!-- ATTENDANCE -->
-    <section id="attendance" class="panel">
+    <!-- Attendance Tab -->
+    <section id="attendance" class="tab-content">
       <h2>Attendance List</h2>
-      <div id="list"></div>
-      <div class="controls">
-        <button id="refresh-list">Refresh</button>
-        <button id="clear-local">Clear Display</button>
-      </div>
+      <ul id="attendance-list"></ul>
     </section>
 
-    <!-- EXPORT -->
-    <section id="export" class="panel">
-      <h2>Export Data</h2>
-      <p>Click to download the attendance.xlsx file of recorded entries.</p>
-      <button id="export-btn">Download Excel</button>
-    </section>
-
-    <!-- GENERATE -->
-    <section id="generate" class="panel">
-      <h2>Generate QR Code</h2>
-      <div class="gen-row">
-        <input id="qr-name" placeholder="Enter name (required)" />
-        <input id="qr-id" placeholder="Optional ID (e.g. T-001)" />
-      </div>
-      <div>
-        <small>If you enter an ID, the QR will contain JSON like <code>{"name":"...","id":"..."}</code>.</small>
-      </div>
-      <button id="generate-btn">Generate QR</button>
-
-      <div id="qrcode" style="margin-top:14px;"></div>
-      <a id="download-qr" download="qrcode.png" style="display:none">⬇️ Download QR</a>
+    <!-- Export Tab -->
+    <section id="export" class="tab-content">
+      <h2>Export Attendance</h2>
+      <button id="export-btn">📊 Export to Excel</button>
     </section>
   </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
