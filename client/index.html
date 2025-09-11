@@ -2,39 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>QR Attendance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Attendance System</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
 <body>
   <header>
-    <h1>QR Attendance System</h1>
+    <h1>📋 QR Attendance System</h1>
     <nav>
-      <button class="tablink" data-tab="scan">📷 Scan</button>
-      <button class="tablink" data-tab="attendance">📝 Attendance</button>
-      <button class="tablink" data-tab="export">⬇️ Export</button>
+      <button onclick="showTab('scan')">Scan</button>
+      <button onclick="showTab('attendance')">Attendance</button>
+      <button onclick="exportExcel()">Export</button>
     </nav>
   </header>
 
   <main>
-    <!-- Scan Tab -->
-    <section id="scan" class="tab-content active">
+    <!-- Scan tab -->
+    <section id="scan" class="tab">
       <h2>Scan QR Code</h2>
-      <button id="start-scan">🎥 Start Camera</button>
-      <p id="scan-status"></p>
-      <div id="qr-reader" style="width: 300px; margin: 0 auto;"></div>
+      <button id="start-camera">Start Camera</button>
+      <div id="reader" style="width: 300px; margin: 20px auto;"></div>
     </section>
 
-    <!-- Attendance Tab -->
-    <section id="attendance" class="tab-content">
+    <!-- Attendance tab -->
+    <section id="attendance" class="tab hidden">
       <h2>Attendance List</h2>
       <ul id="attendance-list"></ul>
-    </section>
-
-    <!-- Export Tab -->
-    <section id="export" class="tab-content">
-      <h2>Export Attendance</h2>
-      <button id="export-btn">📊 Export to Excel</button>
     </section>
   </main>
 

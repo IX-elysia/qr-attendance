@@ -8,12 +8,14 @@ const path = require("path");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
+// Serve static files
 app.use(express.static(path.join(__dirname, "../client")));
 
 let attendance = [];
-
-// Load saved attendance if exists
 const FILE = "attendance.json";
+
+// Load saved attendance if file exists
 if (fs.existsSync(FILE)) {
   attendance = JSON.parse(fs.readFileSync(FILE));
 }
@@ -23,7 +25,7 @@ app.get("/attendance", (req, res) => {
   res.json(attendance);
 });
 
-// Add name
+// Add new attendee
 app.post("/attendance", (req, res) => {
   const { name } = req.body;
   if (name && !attendance.includes(name)) {
@@ -38,6 +40,7 @@ app.get("/export", (req, res) => {
   const wb = xlsx.utils.book_new();
   const ws = xlsx.utils.aoa_to_sheet([["Name"], ...attendance.map(n => [n])]);
   xlsx.utils.book_append_sheet(wb, ws, "Attendance");
+
   const buffer = xlsx.write(wb, { type: "buffer", bookType: "xlsx" });
 
   res.setHeader("Content-Disposition", "attachment; filename=attendance.xlsx");
@@ -45,10 +48,10 @@ app.get("/export", (req, res) => {
   res.send(buffer);
 });
 
-// ✅ Serve index.html on root
+// ✅ Serve index.html at root
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/index.html"));
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

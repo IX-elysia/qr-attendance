@@ -1,58 +1,60 @@
+/* General reset */
+body, h1, h2, ul, li {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  background: white;
+  background-color: white;
   color: #333;
   text-align: center;
 }
 
+/* Header */
 header {
-  background: maroon;
+  background-color: maroon;
   color: white;
   padding: 1rem;
+  border-radius: 0 0 12px 12px;
 }
 
 header h1 {
-  margin: 0;
-}
-
-nav {
-  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 nav button {
-  margin: 0.3rem;
-  padding: 0.6rem 1rem;
+  margin: 0 5px;
+  padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
-  background: white;
+  background-color: white;
   color: maroon;
   font-weight: bold;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
 nav button:hover {
-  background: #f2f2f2;
+  background-color: #f0f0f0;
 }
 
-main {
-  padding: 2rem;
+/* Tabs */
+.tab {
+  margin-top: 2rem;
 }
 
-.tab-content {
+.hidden {
   display: none;
-}
-
-.tab-content.active {
-  display: block;
 }
 
 #attendance-list {
   list-style: none;
-  padding: 0;
+  margin-top: 1rem;
 }
 
 #attendance-list li {
-  padding: 0.4rem;
+  padding: 0.5rem;
   border-bottom: 1px solid #ddd;
 }
