@@ -49,17 +49,17 @@ function stopScanner() {
 
 // Record attendance (shared by scanner + manual input)
 function recordAttendance(name) {
-  const now = new Date();
-  const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
   fetch("/attendance", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const resultBox = document.getElementById("scan-result");
+    resultBox.textContent = `✅ Attendance recorded for ${data.name} at ${data.time}`;
+    fetchAttendance(); // auto-refresh attendance list
   });
-
-  const resultBox = document.getElementById("scan-result");
-  resultBox.textContent = `✅ Attendance recorded for ${name} at ${time}`;
 }
 
 // Manual input function
