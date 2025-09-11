@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>QR Attendance</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Scanner and generator libraries (load before app.js) -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" defer></script>
+
+  <!-- Your UI logic -->
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -15,33 +20,56 @@
       <button class="tab active" data-tab="scan">Scan</button>
       <button class="tab" data-tab="attendance">Attendance</button>
       <button class="tab" data-tab="export">Export</button>
+      <button class="tab" data-tab="generate">Generate QR</button>
     </nav>
   </header>
 
   <main>
-    <!-- Scan Panel -->
-    <div id="scan" class="panel active">
+    <!-- SCAN PANEL -->
+    <section id="scan" class="panel active">
       <h2>Scan QR</h2>
       <button id="start-scan">🎥 Start Camera</button>
-      <div id="qr-reader" style="width:300px;height:300px;margin-top:10px;"></div>
+      <div id="qr-reader" style="width:320px;height:320px;margin:12px auto;"></div>
       <div id="scan-status" class="status"></div>
-      <input id="manual-name" placeholder="Enter name manually">
-      <button id="manual-submit">Submit</button>
-    </div>
 
-    <!-- Attendance Panel -->
-    <div id="attendance" class="panel">
+      <div class="manual">
+        <input id="manual-name" placeholder="Enter name manually" />
+        <button id="manual-submit">Submit</button>
+      </div>
+    </section>
+
+    <!-- ATTENDANCE PANEL -->
+    <section id="attendance" class="panel">
       <h2>Attendance List</h2>
       <div id="list"></div>
-      <button id="refresh-list">Refresh</button>
-      <button id="clear-local">Clear Display</button>
-    </div>
+      <div class="controls">
+        <button id="refresh-list">Refresh</button>
+        <button id="clear-local">Clear Display</button>
+      </div>
+    </section>
 
-    <!-- Export Panel -->
-    <div id="export" class="panel">
+    <!-- EXPORT PANEL -->
+    <section id="export" class="panel">
       <h2>Export Data</h2>
+      <p>Click to download the attendance.xlsx file of recorded entries.</p>
       <button id="export-btn">Download Excel</button>
-    </div>
+    </section>
+
+    <!-- GENERATE PANEL -->
+    <section id="generate" class="panel">
+      <h2>Generate QR Code</h2>
+      <div class="gen-row">
+        <input id="qr-name" placeholder="Enter name (required)" />
+        <input id="qr-id" placeholder="Optional ID (e.g. T-001)" />
+      </div>
+      <div>
+        <small>If you enter an ID, the QR will contain JSON `{\"name\":\"...\",\"id\":\"...\"}`.</small>
+      </div>
+      <button id="generate-btn">Generate QR</button>
+
+      <div id="qrcode" style="margin-top:14px;"></div>
+      <a id="download-qr" download="qrcode.png" style="display:none">⬇️ Download QR</a>
+    </section>
   </main>
 </body>
 </html>

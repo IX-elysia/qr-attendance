@@ -39,7 +39,7 @@ nav .tab {
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 nav .tab.active,
@@ -48,58 +48,50 @@ nav .tab:hover {
   color: white;
 }
 
-/* Panels */
+/* Main container */
 main {
   display: flex;
   justify-content: center;
   margin: 2rem auto;
   width: 100%;
-  max-width: 600px;
+  max-width: 720px;
+  padding: 0 12px;
 }
 
+/* Panels */
 .panel {
   display: none;
   background: white;
   padding: 2rem;
   border-radius: 10px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
   text-align: center;
   width: 100%;
 }
 
-.panel.active {
-  display: block;
-}
+.panel.active { display: block; }
 
 .panel h2 {
   margin-bottom: 1rem;
   color: #800000;
 }
 
-/* QR Scanner Box */
-#qr-reader {
-  border: 2px solid #800000;
-  border-radius: 10px;
-  margin: 1rem auto;
-}
-
-/* Status text */
-.status {
-  margin-top: 1rem;
-  font-weight: bold;
-  color: #555;
-}
-
-/* Input + Buttons */
+/* Inputs & layout */
 input {
-  padding: 0.5rem;
-  margin-top: 0.5rem;
+  padding: 0.6rem;
+  margin: 0.5rem 0;
   width: 80%;
-  max-width: 300px;
+  max-width: 320px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
+.gen-row input { display: inline-block; width: calc(50% - 10px); margin: 6px 5px; }
+
+/* Buttons */
 button {
   margin-top: 0.8rem;
   padding: 0.6rem 1.2rem;
@@ -107,21 +99,25 @@ button {
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  transition: all 0.2s ease;
-}
-
-/* Primary maroon buttons */
-#start-scan, #manual-submit, #refresh-list, #clear-local, #export-btn {
+  transition: all 0.15s ease;
   background: #800000;
   color: white;
 }
 
-#start-scan:hover,
-#manual-submit:hover,
-#refresh-list:hover,
-#clear-local:hover,
-#export-btn:hover {
-  background: #a00000;
+button:hover { background: #a00000; }
+
+/* QR area */
+#qr-reader {
+  border: 2px solid #800000;
+  border-radius: 10px;
+  margin: 12px auto;
+}
+
+/* Status text */
+.status {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #555;
 }
 
 /* Attendance list */
@@ -135,6 +131,35 @@ button {
 }
 
 .item {
-  padding: 0.5rem;
+  padding: 0.6rem;
   border-bottom: 1px solid #eee;
+}
+.muted { color:#777; font-size:0.9rem; }
+
+/* Generated QR + download link */
+#qrcode img, #qrcode canvas {
+  margin-top: 1rem;
+  border: 2px solid #800000;
+  border-radius: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#download-qr {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 0.5rem 0.9rem;
+  background: #800000;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+#download-qr:hover { background: #a00000; }
+
+/* Small screens */
+@media (max-width:420px){
+  .gen-row input { display:block; width:90%; margin:8px auto; }
+  nav .tab { padding:0.4rem 0.6rem; margin:0 0.15rem; font-size:0.9rem; }
 }
