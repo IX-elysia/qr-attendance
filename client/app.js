@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const exportBtn = document.getElementById("export-btn");
   const generateBtn = document.getElementById("generate-qr");
   const qrcodeDiv = document.getElementById("qrcode");
+  const downloadBtn = document.getElementById("download-qr");
 
   // Start Camera
   startBtn.addEventListener("click", () => {
@@ -88,6 +89,20 @@ document.addEventListener("DOMContentLoaded", () => {
       width: 200,
       height: 200
     });
+    downloadBtn.style.display = "inline-block";
+
+    // Prepare download link
+    setTimeout(() => {
+      const qrCanvas = qrcodeDiv.querySelector("canvas");
+      if (qrCanvas) {
+        downloadBtn.onclick = () => {
+          const link = document.createElement("a");
+          link.download = `${text}_qr.png`;
+          link.href = qrCanvas.toDataURL();
+          link.click();
+        };
+      }
+    }, 500);
   });
 
   // Add to Attendance List
