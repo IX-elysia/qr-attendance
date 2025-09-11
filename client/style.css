@@ -1,18 +1,30 @@
+/* Global */
 body {
-  font-family: Arial, sans-serif;
-  background: #fff;
+  font-family: 'Poppins', sans-serif;
+  background: #f9f9f9;
   color: #333;
   text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
+/* Header */
 header {
   background: maroon;
   color: white;
-  padding: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Navigation */
 nav {
-  margin: 1rem;
+  margin: 1rem 0;
 }
 
 nav button {
@@ -24,30 +36,45 @@ nav button {
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 nav button:hover {
   background: #a00000;
 }
 
+/* Scanner */
 .scanner-controls {
   margin: 1rem;
 }
 
 .scanner-box {
-  width: 320px;
-  height: 320px;
+  width: 340px;
+  height: 340px;
   margin: 1rem auto;
   border: 3px solid maroon;
   border-radius: 12px;
-  overflow: hidden; /* keeps webcam inside the box */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
+#qr-reader video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover; /* fills the box */
+}
+
+/* Inputs & Buttons */
 input {
   padding: 0.5rem;
   margin-top: 0.5rem;
   border-radius: 6px;
   border: 1px solid #ccc;
+  width: 200px;
 }
 
 button {
@@ -59,12 +86,15 @@ button {
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 button:hover {
   background: #a00000;
 }
 
+/* Sections */
 main section {
   display: none;
   margin-top: 2rem;
@@ -74,19 +104,23 @@ main section.active {
   display: block;
 }
 
+/* Attendance */
 .attendance-box {
-  width: 60%;
+  width: 70%;
   margin: auto;
   border: 2px solid maroon;
   border-radius: 12px;
   padding: 1rem;
   text-align: left;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-.attendance-box h3, .attendance-box p {
+#attendance-counter {
   text-align: center;
   color: maroon;
   font-weight: bold;
+  margin-bottom: 1rem;
 }
 
 .attendance-buttons {
@@ -97,9 +131,11 @@ main section.active {
 #attendance-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 #attendance-list li {
-  padding: 5px;
-  border-bottom: 1px solid #ccc;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
 }
