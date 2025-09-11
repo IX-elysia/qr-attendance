@@ -6,11 +6,11 @@
   <title>QR Attendance</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Scanner and generator libraries (load before app.js) -->
+  <!-- Scanner and generator libraries -->
   <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" defer></script>
 
-  <!-- Your UI logic -->
+  <!-- App logic -->
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -25,7 +25,7 @@
   </header>
 
   <main>
-    <!-- SCAN PANEL -->
+    <!-- SCAN -->
     <section id="scan" class="panel active">
       <h2>Scan QR</h2>
       <button id="start-scan">🎥 Start Camera</button>
@@ -38,7 +38,7 @@
       </div>
     </section>
 
-    <!-- ATTENDANCE PANEL -->
+    <!-- ATTENDANCE -->
     <section id="attendance" class="panel">
       <h2>Attendance List</h2>
       <div id="list"></div>
@@ -48,14 +48,14 @@
       </div>
     </section>
 
-    <!-- EXPORT PANEL -->
+    <!-- EXPORT -->
     <section id="export" class="panel">
       <h2>Export Data</h2>
       <p>Click to download the attendance.xlsx file of recorded entries.</p>
       <button id="export-btn">Download Excel</button>
     </section>
 
-    <!-- GENERATE PANEL -->
+    <!-- GENERATE -->
     <section id="generate" class="panel">
       <h2>Generate QR Code</h2>
       <div class="gen-row">
@@ -63,7 +63,7 @@
         <input id="qr-id" placeholder="Optional ID (e.g. T-001)" />
       </div>
       <div>
-        <small>If you enter an ID, the QR will contain JSON `{\"name\":\"...\",\"id\":\"...\"}`.</small>
+        <small>If you enter an ID, the QR will contain JSON like <code>{"name":"...","id":"..."}</code>.</small>
       </div>
       <button id="generate-btn">Generate QR</button>
 
