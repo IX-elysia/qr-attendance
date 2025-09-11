@@ -11,7 +11,7 @@ function showTab(tabId) {
   }
 }
 
-// Start camera button
+// Start/Stop camera
 document.getElementById("start-camera").addEventListener("click", () => {
   if (!isCameraRunning) {
     startScanner();
@@ -47,7 +47,7 @@ function stopScanner() {
   }
 }
 
-// Record attendance (shared by scanner + manual input)
+// Record attendance (QR + Manual)
 function recordAttendance(name) {
   fetch("/attendance", {
     method: "POST",
@@ -57,12 +57,12 @@ function recordAttendance(name) {
   .then(res => res.json())
   .then(data => {
     const resultBox = document.getElementById("scan-result");
-    resultBox.textContent = `✅ Attendance recorded for ${data.name} at ${data.time}`;
-    fetchAttendance(); // auto-refresh attendance list
+    resultBox.textContent = `✅ ${data.name} recorded at ${data.date} ${data.time}`;
+    fetchAttendance();
   });
 }
 
-// Manual input function
+// Manual input
 function addManual() {
   const input = document.getElementById("manual-name");
   const name = input.value.trim();
@@ -72,7 +72,7 @@ function addManual() {
   }
 }
 
-// Fetch attendance list
+// Fetch attendance
 function fetchAttendance() {
   fetch("/attendance")
     .then(res => res.json())
@@ -84,20 +84,20 @@ function fetchAttendance() {
       } else {
         data.forEach(entry => {
           const li = document.createElement("li");
-          li.textContent = `${entry.name} – ${entry.time}`;
+          li.textContent = `${entry.name} – ${entry.date} ${entry.time}`;
           list.appendChild(li);
         });
       }
     });
 }
 
-// Clear attendance list
+// Clear attendance
 function clearAttendance() {
   fetch("/attendance", { method: "DELETE" })
     .then(() => fetchAttendance());
 }
 
-// Export to Excel
+// Export Excel
 function exportExcel() {
   window.location.href = "/export";
 }

@@ -1,158 +1,70 @@
-/* Reset */
-body, h1, h2, ul, li, p, button, input {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   font-family: Arial, sans-serif;
-  background-color: white;
+  margin: 0;
+  background: #fff;
   color: #333;
   text-align: center;
 }
 
-/* Header */
 header {
-  background-color: maroon;
+  background: maroon;
   color: white;
   padding: 1rem;
-  border-radius: 0 0 12px 12px;
-}
-
-header h1 {
-  margin-bottom: 0.5rem;
 }
 
 nav button {
   margin: 0 5px;
-  padding: 0.5rem 1rem;
+  padding: 8px 15px;
   border: none;
-  border-radius: 6px;
-  background-color: white;
+  border-radius: 8px;
+  background: white;
   color: maroon;
-  font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
+  font-weight: bold;
 }
 
 nav button:hover {
-  background-color: #f0f0f0;
+  background: #f2f2f2;
 }
 
-/* Tabs */
+main {
+  padding: 2rem;
+}
+
 .tab {
-  margin-top: 2rem;
+  margin-top: 20px;
 }
 
 .hidden {
   display: none;
 }
 
-/* Scanner box */
-.scanner-box {
+#reader {
+  margin: 1rem auto;
   width: 300px;
-  height: 250px;
-  margin: 20px auto;
-  border: 2px solid maroon;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fafafa;
+  height: 300px;
+  border: 3px solid maroon;
+  border-radius: 15px;
 }
 
-/* Manual input */
-.manual-input {
-  margin-top: 1.5rem;
-}
-
-.manual-input input {
-  padding: 0.5rem;
-  border: 1px solid #aaa;
-  border-radius: 6px;
-  width: 200px;
-  margin-right: 5px;
-}
-
-.manual-input button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: maroon;
-  color: white;
+#scan-result {
+  margin-top: 10px;
   font-weight: bold;
-  cursor: pointer;
+  color: green;
 }
 
-.manual-input button:hover {
-  background-color: #800000;
+.manual-input {
+  margin-top: 20px;
 }
 
-/* Attendance list */
 #attendance-list {
   list-style: none;
-  margin-top: 1rem;
   padding: 0;
-  max-width: 300px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: left;
 }
 
 #attendance-list li {
-  padding: 0.5rem;
-  border-bottom: 1px solid #ddd;
-}
-
-/* Attendance actions */
-.attendance-actions {
-  margin-top: 1rem;
-}
-
-.attendance-actions button {
-  margin: 0 5px;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: maroon;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.attendance-actions button:hover {
-  background-color: #800000;
-}
-
-/* Export section */
-.export-card {
-  margin: 2rem auto;
-  padding: 1.5rem;
-  border: 2px solid maroon;
-  border-radius: 12px;
-  max-width: 300px;
-  background: #fafafa;
-}
-
-.export-btn {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: maroon;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.export-btn:hover {
-  background-color: #800000;
-}
-
-/* Success message */
-.success-message {
-  margin-top: 1rem;
-  color: green;
-  font-weight: bold;
+  margin: 5px 0;
+  padding: 8px;
+  background: #f9f9f9;
+  border-radius: 8px;
 }

@@ -1,28 +1,52 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const app = express();
-const PORT = process.env.PORT || 5000;
+const bodyParser = require("body-parser");
+const ExcelJS = require("exceljs");
 
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "client")));
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 let attendance = [];
 
-// Load existing attendance
-if (fs.existsSync("attendance.json")) {
-  attendance = JSON.parse(fs.readFileSync("attendance.json"));
+// Load saved attendance
+const dataFile = path.join(__dirname, "attendance.json");
+if (fs.existsSync(dataFile)) {
+  attendance = JSON.parse(fs.readFileSync(dataFile));
+}
+
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "client")));
+
+// Save attendance to JSON file
+function saveAttendance() {
+  fs.writeFileSync(dataFile, JSON.stringify(attendance, null, 2));
 }
 
 // Record attendance
 app.post("/attendance", (req, res) => {
   const { name } = req.body;
-  const now = new Date();
-  const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-  attendance.push({ name, time });
-  fs.writeFileSync("attendance.json", JSON.stringify(attendance));
-  res.json({ message: "Attendance recorded", name, time });
+  const now = new Date();
+  const date = now.toLocaleDateString("en-PH", {
+    timeZone: "Asia/Manila",
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  });
+
+  const time = now.toLocaleString("en-PH", {
+    timeZone: "Asia/Manila",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  });
+
+  const entry = { name, date, time };
+  attendance.push(entry);
+  saveAttendance();
+
+  res.json(entry);
 });
 
 // Get attendance list
@@ -33,30 +57,38 @@ app.get("/attendance", (req, res) => {
 // Clear attendance
 app.delete("/attendance", (req, res) => {
   attendance = [];
-  fs.writeFileSync("attendance.json", JSON.stringify(attendance));
-  res.json({ message: "Attendance cleared" });
+  saveAttendance();
+  res.sendStatus(200);
 });
 
 // Export attendance to Excel
-app.get("/export", (req, res) => {
-  const ExcelJS = require("exceljs");
+app.get("/export", async (req, res) => {
   const workbook = new ExcelJS.Workbook();
-  const sheet = workbook.addWorksheet("Attendance");
+  const worksheet = workbook.addWorksheet("Attendance");
 
-  sheet.columns = [
-    { header: "Name", key: "name", width: 30 },
-    { header: "Time", key: "time", width: 20 }
+  worksheet.columns = [
+    { header: "Name", key: "name", width: 25 },
+    { header: "Date", key: "date", width: 15 },
+    { header: "Time", key: "time", width: 15 }
   ];
 
-  sheet.addRows(attendance);
+  attendance.forEach(record => {
+    worksheet.addRow(record);
+  });
 
-  res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-  res.setHeader("Content-Disposition", "attachment; filename=attendance.xlsx");
+  res.setHeader(
+    "Content-Disposition",
+    "attachment; filename=attendance.xlsx"
+  );
+  res.setHeader(
+    "Content-Type",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  );
 
-  workbook.xlsx.write(res).then(() => res.end());
+  await workbook.xlsx.write(res);
+  res.end();
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
-});
+app.listen(PORT, () =>
+  console.log(`✅ Server running on http://localhost:${PORT}`)
+);

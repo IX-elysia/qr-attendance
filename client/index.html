@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Attendance System</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="https://unpkg.com/html5-qrcode" defer></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
   <header>
-    <h1>📋 QR Attendance System</h1>
+    <h1>📚 QR Attendance System</h1>
     <nav>
       <button onclick="showTab('scan')">Scan</button>
       <button onclick="showTab('attendance')">Attendance</button>
@@ -18,45 +18,33 @@
   </header>
 
   <main>
-    <!-- Scan tab -->
+    <!-- SCAN TAB -->
     <section id="scan" class="tab">
       <h2>Scan QR Code</h2>
+      <div id="reader"></div>
       <button id="start-camera">Start Camera</button>
-      <div id="reader-container">
-        <div id="reader" class="scanner-box">
-          <p style="color: #aaa;">📷 Camera preview will appear here</p>
-        </div>
-      </div>
-      <p id="scan-result" class="success-message"></p>
+      <div id="scan-result"></div>
 
-      <!-- Manual Input -->
       <div class="manual-input">
-        <h3>Or enter name manually</h3>
+        <h3>Manual Input</h3>
         <input type="text" id="manual-name" placeholder="Enter name">
         <button onclick="addManual()">Add</button>
       </div>
     </section>
 
-    <!-- Attendance tab -->
+    <!-- ATTENDANCE TAB -->
     <section id="attendance" class="tab hidden">
       <h2>Attendance List</h2>
-      <div class="attendance-actions">
-        <button onclick="fetchAttendance()">🔄 Refresh</button>
-        <button onclick="clearAttendance()">🗑 Clear</button>
-      </div>
       <ul id="attendance-list"></ul>
+      <button onclick="clearAttendance()">Clear Attendance</button>
     </section>
 
-    <!-- Export tab -->
+    <!-- EXPORT TAB -->
     <section id="export" class="tab hidden">
-      <h2>Export Attendance</h2>
-      <div class="export-card">
-        <p>Download the attendance list as an Excel file.</p>
-        <button onclick="exportExcel()" class="export-btn">Download Excel</button>
-      </div>
+      <h2>Export Data</h2>
+      <p>You can download all recorded attendance in Excel format.</p>
+      <button onclick="exportExcel()">Export to Excel</button>
     </section>
   </main>
-
-  <script src="app.js"></script>
 </body>
 </html>
