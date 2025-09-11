@@ -1,3 +1,4 @@
+/* General Layout */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -6,6 +7,7 @@ body {
   text-align: center;
 }
 
+/* Header */
 header {
   background: maroon;
   color: white;
@@ -16,6 +18,7 @@ header h1 {
   margin: 0 0 0.5rem;
 }
 
+/* Navigation */
 nav button {
   background: white;
   border: none;
@@ -32,18 +35,20 @@ nav button:hover {
   background: #f0f0f0;
 }
 
+/* Main Content */
 main {
   padding: 2rem;
 }
 
 .section {
-  display: none;
+  display: none; /* hide all */
 }
 
 .section:not(.hidden) {
-  display: block;
+  display: block; /* show only active one */
 }
 
+/* QR Reader Box */
 #qr-reader {
   width: 300px;
   height: 300px;
@@ -53,6 +58,7 @@ main {
   overflow: hidden;
 }
 
+/* Controls */
 .controls {
   margin-top: 1rem;
 }
@@ -72,6 +78,7 @@ main {
   background: #a00000;
 }
 
+/* Manual Input */
 .manual-input {
   margin-top: 1rem;
 }
@@ -82,6 +89,7 @@ main {
   border: 1px solid #ccc;
 }
 
+/* Attendance List */
 #attendanceList {
   list-style: none;
   padding: 0;
