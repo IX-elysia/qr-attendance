@@ -1,4 +1,5 @@
 let attendance = [];
+let html5QrCode = null;
 
 // Switch tabs
 function showSection(id) {
@@ -7,24 +8,35 @@ function showSection(id) {
   if (id === "attendance") renderAttendance();
 }
 
-// Camera scanner
 document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.getElementById("start-camera");
-  if (startBtn) {
-    startBtn.addEventListener("click", () => {
-      const html5QrCode = new Html5Qrcode("qr-reader");
-      html5QrCode.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        (decodedText) => {
-          addToAttendance(decodedText);
-        },
-        (err) => {
-          console.warn(err);
-        }
-      ).catch(err => console.error("Camera start failed:", err));
-    });
-  }
+  const stopBtn = document.getElementById("stop-camera");
+
+  // Start Camera
+  startBtn.addEventListener("click", () => {
+    if (!html5QrCode) {
+      html5QrCode = new Html5Qrcode("qr-reader");
+    }
+    html5QrCode.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: 250 },
+      (decodedText) => {
+        addToAttendance(decodedText);
+      },
+      (err) => {
+        console.warn(err);
+      }
+    ).catch(err => console.error("Camera start failed:", err));
+  });
+
+  // Stop Camera
+  stopBtn.addEventListener("click", () => {
+    if (html5QrCode) {
+      html5QrCode.stop().then(() => {
+        console.log("Camera stopped.");
+      }).catch(err => console.error("Failed to stop camera:", err));
+    }
+  });
 
   // Manual input
   document.getElementById("add-manual").addEventListener("click", () => {
@@ -88,4 +100,6 @@ function renderAttendance() {
     li.textContent = `${item.name} - ${item.time}`;
     list.appendChild(li);
   });
+
+  document.getElementById("attendance-counter").textContent = `Total attendees: ${attendance.length}`;
 }

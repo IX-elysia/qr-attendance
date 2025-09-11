@@ -9,7 +9,7 @@
 </head>
 <body>
   <header>
-    <h1>📷 QGHS Teacher Attendance</h1>
+    <h1>📷 QR Attendance</h1>
   </header>
 
   <nav>
@@ -22,7 +22,10 @@
     <!-- Scan Section -->
     <section id="scan" class="active">
       <h2>Scan QR Code</h2>
-      <button id="start-camera">Start Camera</button>
+      <div class="scanner-controls">
+        <button id="start-camera">Start Camera</button>
+        <button id="stop-camera">Stop Camera</button>
+      </div>
       <div id="qr-reader" class="scanner-box"></div>
 
       <h3>Manual Input</h3>
@@ -33,10 +36,13 @@
     <!-- Attendance Section -->
     <section id="attendance">
       <h2>Attendance List</h2>
-      <ul id="attendance-list"></ul>
-      <div class="attendance-buttons">
-        <button id="refresh-attendance">Refresh</button>
-        <button id="clear-attendance">Clear</button>
+      <div class="attendance-box">
+        <p id="attendance-counter">Total attendees: 0</p>
+        <ul id="attendance-list"></ul>
+        <div class="attendance-buttons">
+          <button id="refresh-attendance">Refresh</button>
+          <button id="clear-attendance">Clear</button>
+        </div>
       </div>
     </section>
 
