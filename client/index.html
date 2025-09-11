@@ -1,62 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>QGHS Teacher Attendance</title>
-  <link rel="stylesheet" href="styles.css">
+
+  <!-- styles -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- libs (loaded before app.js) -->
   <script src="https://unpkg.com/html5-qrcode"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 </head>
 <body>
-  <header>
+  <header class="topbar">
     <h1>QGHS Teacher Attendance</h1>
-    <nav>
-      <button onclick="showSection('scan')">Scan</button>
-      <button onclick="showSection('attendance')">Attendance</button>
-      <button onclick="showSection('generator')">Generate</button>
+    <nav class="tabs">
+      <button class="tab-btn" data-tab="scan">Scan</button>
+      <button class="tab-btn" data-tab="attendance">Attendance</button>
+      <button class="tab-btn" data-tab="generator">Generate QR</button>
     </nav>
   </header>
 
-  <main>
-    <!-- Scan Section -->
-    <section id="scan" class="section">
+  <main class="container">
+    <!-- SCAN -->
+    <section id="scan" class="tab">
       <h2>Scan QR Code</h2>
-      <div id="qr-reader"></div>
-      <div class="controls">
-        <button id="startBtn">Start Camera</button>
-        <button id="stopBtn">Stop Camera</button>
+
+      <div id="qr-reader" class="qr-box">
+        <!-- html5-qrcode will insert the video here; placeholder shown before start -->
+        <div class="placeholder">📷 Camera preview will appear here</div>
       </div>
-      <div class="manual-input">
-        <input id="manualName" type="text" placeholder="Enter name manually">
-        <button id="manualAdd">Add</button>
+
+      <div class="controls">
+        <button id="startBtn" class="btn primary">Start Camera</button>
+        <button id="stopBtn" class="btn">Stop Camera</button>
+      </div>
+
+      <div class="manual">
+        <input id="manualName" type="text" placeholder="Enter teacher name (manual)" />
+        <button id="manualAdd" class="btn">Add</button>
       </div>
     </section>
 
-    <!-- Attendance Section -->
-    <section id="attendance" class="section hidden">
+    <!-- ATTENDANCE -->
+    <section id="attendance" class="tab">
       <h2>Attendance List</h2>
-      <ul id="attendanceList"></ul>
-      <div class="controls">
-        <button id="refreshBtn">Refresh</button>
-        <button id="clearBtn">Clear</button>
-        <button id="exportBtn">Export to Excel</button>
+
+      <div class="attendance-card">
+        <p id="count" class="count">Total: 0</p>
+        <ul id="attendanceList" class="attendance-list">
+          <!-- items injected here -->
+        </ul>
+
+        <div class="controls">
+          <button id="refreshBtn" class="btn">Refresh</button>
+          <button id="clearBtn" class="btn danger">Clear</button>
+          <button id="exportBtn" class="btn primary">Export to Excel</button>
+        </div>
       </div>
     </section>
 
-    <!-- QR Generator Section -->
-    <section id="generator" class="section hidden">
+    <!-- GENERATOR -->
+    <section id="generator" class="tab">
       <h2>Generate QR Code</h2>
-      <input id="qr-input" type="text" placeholder="Enter text for QR">
-      <button id="generateBtn">Generate</button>
-      <div id="qrcode"></div>
-      <button id="downloadBtn" style="display:none;">Download QR</button>
+
+      <div class="generator-card">
+        <input id="qr-input" type="text" placeholder="Enter teacher name" />
+        <div class="generator-actions">
+          <button id="generateBtn" class="btn primary">Generate</button>
+        </div>
+
+        <div id="qrcode-wrapper">
+          <div id="qrcode" aria-hidden="false"></div>
+        </div>
+
+        <div class="generator-actions">
+          <button id="downloadBtn" class="btn" style="display:none">Download QR</button>
+        </div>
+      </div>
     </section>
   </main>
 
-  <!-- Toast -->
-  <div id="toast" class="toast"></div>
+  <!-- toast -->
+  <div id="toast" class="toast" aria-live="polite"></div>
 
+  <!-- app logic -->
   <script src="app.js"></script>
 </body>
 </html>

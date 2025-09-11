@@ -1,139 +1,172 @@
-/* General Layout */
+/* --- Basic layout --- */
+:root {
+  --maroon: #800000;
+  --maroon-dark: #5c0000;
+  --muted: #666;
+}
+
+* { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #fff;
-  color: #333;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: #fbfbfb;
+  color: #222;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Header & tabs */
+.topbar {
+  background: var(--maroon);
+  color: white;
+  padding: 18px 12px;
   text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.topbar h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  letter-spacing: 0.6px;
 }
 
-/* Header */
-header {
-  background: maroon;
-  color: white;
-  padding: 1rem;
+.tabs {
+  margin-top: 10px;
 }
-
-header h1 {
-  margin: 0 0 0.5rem;
-}
-
-/* Navigation */
-nav button {
+.tab-btn {
   background: white;
-  border: none;
-  padding: 0.6rem 1rem;
-  margin: 0 5px;
-  border-radius: 6px;
+  color: var(--maroon);
+  border: 2px solid var(--maroon);
+  padding: 8px 14px;
+  margin: 0 6px;
+  border-radius: 20px;
+  font-weight: 700;
   cursor: pointer;
-  font-weight: bold;
-  color: maroon;
-  transition: 0.3s;
+  transition: all .14s ease;
 }
-
-nav button:hover {
-  background: #f0f0f0;
-}
-
-/* Main Content */
-main {
-  padding: 2rem;
-}
-
-.section {
-  display: none; /* hide all */
-}
-
-.section:not(.hidden) {
-  display: block; /* show only active one */
-}
-
-/* QR Reader Box */
-#qr-reader {
-  width: 300px;
-  height: 300px;
-  margin: 1rem auto;
-  border: 2px solid maroon;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-/* Controls */
-.controls {
-  margin-top: 1rem;
-}
-
-.controls button {
-  background: maroon;
+.tab-btn.active {
+  background: linear-gradient(180deg, var(--maroon), var(--maroon-dark));
   color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(128,0,0,0.18);
+}
+
+/* Container: center content, not stacked full width */
+.container {
+  max-width: 820px;
+  margin: 22px auto;
+  padding: 0 16px 60px;
+}
+
+/* Tab pages (only one visible) */
+.tab {
+  display: none;
+  margin-top: 8px;
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+}
+.tab.visible { display: block; }
+
+/* QR box */
+.qr-box {
+  width: 360px;
+  height: 360px;
+  margin: 0 auto 14px;
+  border-radius: 12px;
+  border: 3px solid var(--maroon);
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qr-box .placeholder { color: #bdbdbd; }
+
+/* make camera feed fully fill the box */
+#qr-reader video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+/* Controls & Buttons */
+.controls, .generator-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+.btn {
+  padding: 10px 14px;
+  border-radius: 999px;
   border: none;
-  padding: 0.5rem 1rem;
-  margin: 5px;
-  border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s;
+  font-weight: 700;
 }
-
-.controls button:hover {
-  background: #a00000;
+.btn.primary {
+  background: var(--maroon);
+  color: white;
+  box-shadow: 0 6px 14px rgba(128,0,0,0.12);
 }
-
-/* Manual Input */
-.manual-input {
-  margin-top: 1rem;
+.btn.danger {
+  background: #c33;
+  color: #fff;
 }
+.btn:hover { transform: translateY(-2px); }
 
-.manual-input input {
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+/* Manual input */
+.manual {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
 }
-
-/* Attendance List */
-#attendanceList {
-  list-style: none;
-  padding: 0;
-  max-width: 400px;
-  margin: 1rem auto;
-  text-align: left;
-}
-
-#attendanceList li {
-  background: #f9f9f9;
+.manual input {
+  padding: 10px;
+  border-radius: 999px;
   border: 1px solid #ddd;
-  padding: 8px;
-  margin: 4px 0;
-  border-radius: 6px;
+  width: 240px;
 }
+
+/* Attendance card & list */
+.attendance-card { max-width: 640px; margin: 0 auto; }
+.count { text-align: center; color: var(--maroon); font-weight: 700; margin-bottom: 8px; }
+.attendance-list { list-style: none; padding: 0; margin: 0 auto; max-width: 640px; text-align: left; }
+.attendance-list li {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+/* QR generator */
+.generator-card { max-width: 640px; margin: 0 auto; }
+#qrcode { display:flex; justify-content:center; margin-top: 12px; }
+#qrcode canvas { border-radius: 8px; background: white; }
 
 /* Toast */
 .toast {
-  visibility: hidden;
-  min-width: 250px;
-  margin-left: -125px;
-  background-color: maroon;
-  color: white;
-  text-align: center;
-  border-radius: 6px;
-  padding: 12px;
   position: fixed;
-  z-index: 1000;
   left: 50%;
-  bottom: 30px;
-  font-size: 16px;
+  transform: translateX(-50%);
+  bottom: 28px;
+  background: var(--maroon);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
 }
-
 .toast.show {
-  visibility: visible;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-@keyframes fadein {
-  from { bottom: 0; opacity: 0; }
-  to { bottom: 30px; opacity: 1; }
-}
-
-@keyframes fadeout {
-  from { bottom: 30px; opacity: 1; }
-  to { bottom: 0; opacity: 0; }
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(-6px);
 }
