@@ -1,16 +1,21 @@
-let attendance = [];
-let html5QrCode = null;
+let html5QrCode;
 
-// Switch tabs
+// Switch between tabs
 function showSection(id) {
   document.querySelectorAll("main section").forEach(sec => sec.classList.remove("active"));
   document.getElementById(id).classList.add("active");
-  if (id === "attendance") renderAttendance();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.getElementById("start-camera");
   const stopBtn = document.getElementById("stop-camera");
+  const qrReader = document.getElementById("qr-reader");
+  const attendanceList = document.getElementById("attendance-list");
+  const addManualBtn = document.getElementById("add-manual");
+  const clearBtn = document.getElementById("clear-attendance");
+  const exportBtn = document.getElementById("export-btn");
+  const generateBtn = document.getElementById("generate-qr");
+  const qrcodeDiv = document.getElementById("qrcode");
 
   // Start Camera
   startBtn.addEventListener("click", () => {
@@ -19,9 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     html5QrCode.start(
       { facingMode: "environment" },
-      { fps: 10, qrbox: 250 },
+      { fps: 10, qrbox: { width: 300, height: 300 } },
       (decodedText) => {
-        addToAttendance(decodedText);
+        addAttendance(decodedText);
       },
       (err) => {
         console.warn(err);
@@ -33,73 +38,62 @@ document.addEventListener("DOMContentLoaded", () => {
   stopBtn.addEventListener("click", () => {
     if (html5QrCode) {
       html5QrCode.stop().then(() => {
-        console.log("Camera stopped.");
-      }).catch(err => console.error("Failed to stop camera:", err));
+        console.log("Camera stopped");
+      }).catch(err => console.error("Stop failed", err));
     }
   });
 
-  // Manual input
-  document.getElementById("add-manual").addEventListener("click", () => {
+  // Add Manual Attendance
+  addManualBtn.addEventListener("click", () => {
     const name = document.getElementById("manual-name").value.trim();
     if (name) {
-      addToAttendance(name);
+      addAttendance(name);
       document.getElementById("manual-name").value = "";
     }
   });
 
-  // Refresh attendance
-  document.getElementById("refresh-attendance").addEventListener("click", () => {
-    renderAttendance();
+  // Clear Attendance
+  clearBtn.addEventListener("click", () => {
+    attendanceList.innerHTML = "";
   });
 
-  // Clear attendance
-  document.getElementById("clear-attendance").addEventListener("click", () => {
-    attendance = [];
-    renderAttendance();
-  });
-
-  // Export to Excel (CSV file)
-  document.getElementById("export-btn").addEventListener("click", () => {
-    if (attendance.length === 0) {
-      alert("No attendance to export!");
+  // Export Attendance
+  exportBtn.addEventListener("click", () => {
+    const rows = [];
+    document.querySelectorAll("#attendance-list li").forEach(li => rows.push([li.textContent]));
+    if (rows.length === 0) {
+      alert("No attendance data to export!");
       return;
     }
-    let csv = "Name,Time\n";
-    attendance.forEach(item => {
-      csv += `${item.name},${item.time}\n`;
+    let csvContent = "data:text/csv;charset=utf-8," 
+      + rows.map(e => e.join(",")).join("\n");
+    const link = document.createElement("a");
+    link.setAttribute("href", encodeURI(csvContent));
+    link.setAttribute("download", "attendance.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+
+  // Generate QR
+  generateBtn.addEventListener("click", () => {
+    const text = document.getElementById("qr-input").value.trim();
+    if (!text) {
+      alert("Enter a name to generate QR");
+      return;
+    }
+    qrcodeDiv.innerHTML = "";
+    new QRCode(qrcodeDiv, {
+      text: text,
+      width: 200,
+      height: 200
     });
-
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.setAttribute("hidden", "");
-    a.setAttribute("href", url);
-    a.setAttribute("download", "attendance.csv");
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
   });
-});
 
-// Add to attendance list
-function addToAttendance(name) {
-  const now = new Date();
-  const time = now.toLocaleString("en-PH", { timeZone: "Asia/Manila" });
-  attendance.push({ name, time });
-  renderAttendance();
-  alert(`${name} recorded at ${time}`);
-}
-
-// Render attendance list
-function renderAttendance() {
-  const list = document.getElementById("attendance-list");
-  list.innerHTML = "";
-  attendance.forEach(item => {
+  // Add to Attendance List
+  function addAttendance(name) {
     const li = document.createElement("li");
-    li.textContent = `${item.name} - ${item.time}`;
-    list.appendChild(li);
-  });
-
-  document.getElementById("attendance-counter").textContent = `Total attendees: ${attendance.length}`;
-}
+    li.textContent = `${name} — ${new Date().toLocaleString()}`;
+    attendanceList.appendChild(li);
+  }
+});

@@ -1,141 +1,87 @@
-/* Global */
 body {
-  font-family: 'Poppins', sans-serif;
-  background: #f9f9f9;
+  font-family: Arial, sans-serif;
+  background: #fff;
   color: #333;
   text-align: center;
   margin: 0;
   padding: 0;
 }
 
-/* Header */
 header {
   background: maroon;
   color: white;
-  padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  padding: 1rem;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-header h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  font-weight: 600;
-}
-
-/* Navigation */
 nav {
-  margin: 1rem 0;
+  margin: 1rem;
 }
 
 nav button {
   background: maroon;
   color: white;
   border: none;
-  padding: 0.6rem 1.2rem;
+  padding: 0.5rem 1rem;
   margin: 0 5px;
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 nav button:hover {
   background: #a00000;
 }
 
-/* Scanner */
-.scanner-controls {
-  margin: 1rem;
+main {
+  max-width: 600px;
+  margin: auto;
+  padding: 1rem;
 }
 
-.scanner-box {
-  width: 340px;
-  height: 340px;
-  margin: 1rem auto;
-  border: 3px solid maroon;
-  border-radius: 12px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-#qr-reader video {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover; /* fills the box */
-}
-
-/* Inputs & Buttons */
-input {
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  width: 200px;
-}
-
-button {
-  background: maroon;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  margin: 0.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-  font-weight: 500;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-button:hover {
-  background: #a00000;
-}
-
-/* Sections */
 main section {
   display: none;
-  margin-top: 2rem;
 }
 
 main section.active {
   display: block;
 }
 
-/* Attendance */
-.attendance-box {
-  width: 70%;
-  margin: auto;
+#qr-reader {
+  width: 300px;
+  height: 300px;
+  margin: 1rem auto;
   border: 2px solid maroon;
   border-radius: 12px;
-  padding: 1rem;
-  text-align: left;
-  background: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  background: #f8f8f8;
 }
 
-#attendance-counter {
-  text-align: center;
-  color: maroon;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-.attendance-buttons {
-  text-align: center;
+#manual-entry {
   margin-top: 1rem;
 }
 
-#attendance-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+#manual-entry input {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
-#attendance-list li {
-  padding: 8px;
-  border-bottom: 1px solid #eee;
-  font-size: 0.95rem;
+#manual-entry button {
+  background: maroon;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-left: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#attendance-list {
+  text-align: left;
+  margin-top: 1rem;
+}
+
+#qrcode {
+  margin-top: 1rem;
 }
