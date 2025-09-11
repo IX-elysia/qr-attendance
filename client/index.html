@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QGHS Teacher Attendance</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://unpkg.com/html5-qrcode" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js" defer></script>
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
   <header>
@@ -15,39 +14,49 @@
     <nav>
       <button onclick="showSection('scan')">Scan</button>
       <button onclick="showSection('attendance')">Attendance</button>
-      <button onclick="showSection('generator')">Generate QR</button>
+      <button onclick="showSection('generator')">Generate</button>
     </nav>
   </header>
 
   <main>
-    <!-- QR Scanner -->
-    <section id="scan" class="card section">
-      <h2>Scan QR</h2>
+    <!-- Scan Section -->
+    <section id="scan" class="section hidden">
+      <h2>Scan QR Code</h2>
       <div id="qr-reader"></div>
-      <button id="startBtn">Start Camera</button>
-      <button id="stopBtn">Stop Camera</button>
-      <h3>Manual Entry</h3>
-      <input type="text" id="manualName" placeholder="Enter teacher name"/>
-      <button id="manualAdd">Add Attendance</button>
+      <div class="controls">
+        <button id="startBtn">Start Camera</button>
+        <button id="stopBtn">Stop Camera</button>
+      </div>
+      <div class="manual-input">
+        <input id="manualName" type="text" placeholder="Enter name manually">
+        <button id="manualAdd">Add</button>
+      </div>
     </section>
 
-    <!-- Attendance List -->
-    <section id="attendance" class="card section hidden">
+    <!-- Attendance Section -->
+    <section id="attendance" class="section hidden">
       <h2>Attendance List</h2>
       <ul id="attendanceList"></ul>
-      <button id="refreshBtn">Refresh</button>
-      <button id="clearBtn">Clear</button>
-      <button id="exportBtn">Export to Excel</button>
+      <div class="controls">
+        <button id="refreshBtn">Refresh</button>
+        <button id="clearBtn">Clear</button>
+        <button id="exportBtn">Export to Excel</button>
+      </div>
     </section>
 
-    <!-- QR Generator -->
-    <section id="generator" class="card section hidden">
-      <h2>QR Generator</h2>
-      <input type="text" id="qr-input" placeholder="Enter teacher name"/>
-      <button id="generateBtn">Generate QR</button>
+    <!-- QR Generator Section -->
+    <section id="generator" class="section hidden">
+      <h2>Generate QR Code</h2>
+      <input id="qr-input" type="text" placeholder="Enter text for QR">
+      <button id="generateBtn">Generate</button>
       <div id="qrcode"></div>
       <button id="downloadBtn" style="display:none;">Download QR</button>
     </section>
   </main>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
 </body>
 </html>

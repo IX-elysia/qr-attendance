@@ -1,94 +1,131 @@
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  background: #f9f9f9;
+  font-family: Arial, sans-serif;
+  background: #fff;
   color: #333;
+  text-align: center;
 }
 
 header {
   background: maroon;
   color: white;
-  text-align: center;
   padding: 1rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-  position: sticky;
-  top: 0;
-  z-index: 10;
 }
 
-nav {
-  margin-top: 0.5rem;
+header h1 {
+  margin: 0 0 0.5rem;
 }
 
 nav button {
   background: white;
-  color: maroon;
   border: none;
-  padding: 0.5rem 1rem;
-  margin: 0.3rem;
-  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  margin: 0 5px;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
+  color: maroon;
+  transition: 0.3s;
 }
 
 nav button:hover {
-  background: #eee;
+  background: #f0f0f0;
 }
 
 main {
-  padding: 1.5rem;
+  padding: 2rem;
 }
 
-.card {
-  background: white;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  text-align: center;
-  max-width: 600px;
-  margin: auto;
+.section {
+  display: none;
 }
 
-button {
-  background: maroon;
-  color: white;
-  border: none;
-  padding: 0.6rem 1rem;
-  margin: 0.3rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
+.section:not(.hidden) {
+  display: block;
 }
 
-button:hover {
-  background: #a00000;
-}
-
-/* QR Reader */
 #qr-reader {
-  width: 320px;
-  height: 320px;
+  width: 300px;
+  height: 300px;
   margin: 1rem auto;
   border: 2px solid maroon;
-  border-radius: 12px;
-  background: #000;
+  border-radius: 10px;
   overflow: hidden;
-  position: relative;
 }
 
-#qr-reader video {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
-#qrcode {
+.controls {
   margin-top: 1rem;
 }
 
-.hidden {
-  display: none;
+.controls button {
+  background: maroon;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.controls button:hover {
+  background: #a00000;
+}
+
+.manual-input {
+  margin-top: 1rem;
+}
+
+.manual-input input {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#attendanceList {
+  list-style: none;
+  padding: 0;
+  max-width: 400px;
+  margin: 1rem auto;
+  text-align: left;
+}
+
+#attendanceList li {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 8px;
+  margin: 4px 0;
+  border-radius: 6px;
+}
+
+/* Toast */
+.toast {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: maroon;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 12px;
+  position: fixed;
+  z-index: 1000;
+  left: 50%;
+  bottom: 30px;
+  font-size: 16px;
+}
+
+.toast.show {
+  visibility: visible;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@keyframes fadein {
+  from { bottom: 0; opacity: 0; }
+  to { bottom: 30px; opacity: 1; }
+}
+
+@keyframes fadeout {
+  from { bottom: 30px; opacity: 1; }
+  to { bottom: 0; opacity: 0; }
 }
