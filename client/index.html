@@ -12,26 +12,27 @@
 <body>
   <header>
     <h1>QGHS Teacher Attendance</h1>
+    <nav>
+      <button onclick="showSection('scan')">Scan</button>
+      <button onclick="showSection('attendance')">Attendance</button>
+      <button onclick="showSection('generator')">Generate QR</button>
+    </nav>
   </header>
 
   <main>
     <!-- QR Scanner -->
-    <section class="card">
+    <section id="scan" class="card section">
       <h2>Scan QR</h2>
       <div id="qr-reader"></div>
       <button id="startBtn">Start Camera</button>
       <button id="stopBtn">Stop Camera</button>
-    </section>
-
-    <!-- Manual Input -->
-    <section class="card">
-      <h2>Manual Entry</h2>
+      <h3>Manual Entry</h3>
       <input type="text" id="manualName" placeholder="Enter teacher name"/>
       <button id="manualAdd">Add Attendance</button>
     </section>
 
     <!-- Attendance List -->
-    <section class="card">
+    <section id="attendance" class="card section hidden">
       <h2>Attendance List</h2>
       <ul id="attendanceList"></ul>
       <button id="refreshBtn">Refresh</button>
@@ -40,7 +41,7 @@
     </section>
 
     <!-- QR Generator -->
-    <section class="card">
+    <section id="generator" class="card section hidden">
       <h2>QR Generator</h2>
       <input type="text" id="qr-input" placeholder="Enter teacher name"/>
       <button id="generateBtn">Generate QR</button>

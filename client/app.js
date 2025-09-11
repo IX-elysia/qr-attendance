@@ -12,6 +12,12 @@ const qrcodeDiv = document.getElementById("qrcode");
 
 let html5QrCode;
 
+// Section toggle
+function showSection(id) {
+  document.querySelectorAll(".section").forEach(sec => sec.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+
 // Load attendance
 async function loadAttendance() {
   const res = await fetch("/attendance");
@@ -90,7 +96,7 @@ generateBtn.addEventListener("click", () => {
     height: 200,
     colorDark: "#000000",
     colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H
+    correctLevel: QRCode.CorrectLevel.L  // simpler, more readable
   });
   downloadBtn.style.display = "inline-block";
 
