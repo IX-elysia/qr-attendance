@@ -1,5 +1,5 @@
 /* Reset */
-body, h1, h2, ul, li, p, button {
+body, h1, h2, ul, li, p, button, input {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -47,6 +47,46 @@ nav button:hover {
 
 .hidden {
   display: none;
+}
+
+/* Scanner box */
+.scanner-box {
+  width: 300px;
+  height: 250px;
+  margin: 20px auto;
+  border: 2px solid maroon;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+}
+
+/* Manual input */
+.manual-input {
+  margin-top: 1.5rem;
+}
+
+.manual-input input {
+  padding: 0.5rem;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  width: 200px;
+  margin-right: 5px;
+}
+
+.manual-input button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: maroon;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.manual-input button:hover {
+  background-color: #800000;
 }
 
 /* Attendance list */

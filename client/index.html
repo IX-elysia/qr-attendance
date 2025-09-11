@@ -23,11 +23,18 @@
       <h2>Scan QR Code</h2>
       <button id="start-camera">Start Camera</button>
       <div id="reader-container">
-        <div id="reader" style="width: 300px; height: 250px; margin: 20px auto; border: 2px dashed maroon; display: flex; align-items: center; justify-content: center;">
+        <div id="reader" class="scanner-box">
           <p style="color: #aaa;">📷 Camera preview will appear here</p>
         </div>
       </div>
       <p id="scan-result" class="success-message"></p>
+
+      <!-- Manual Input -->
+      <div class="manual-input">
+        <h3>Or enter name manually</h3>
+        <input type="text" id="manual-name" placeholder="Enter name">
+        <button onclick="addManual()">Add</button>
+      </div>
     </section>
 
     <!-- Attendance tab -->

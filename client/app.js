@@ -27,16 +27,7 @@ function startScanner() {
     { facingMode: "environment" },
     { fps: 10, qrbox: 250 },
     qrCodeMessage => {
-      fetch("/attendance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: qrCodeMessage })
-      });
-
-      // ✅ Show success message
-      const resultBox = document.getElementById("scan-result");
-      resultBox.textContent = `✅ Attendance recorded for ${qrCodeMessage}`;
-
+      recordAttendance(qrCodeMessage);
       stopScanner();
     }
   ).then(() => {
@@ -56,6 +47,31 @@ function stopScanner() {
   }
 }
 
+// Record attendance (shared by scanner + manual input)
+function recordAttendance(name) {
+  const now = new Date();
+  const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  fetch("/attendance", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name })
+  });
+
+  const resultBox = document.getElementById("scan-result");
+  resultBox.textContent = `✅ Attendance recorded for ${name} at ${time}`;
+}
+
+// Manual input function
+function addManual() {
+  const input = document.getElementById("manual-name");
+  const name = input.value.trim();
+  if (name) {
+    recordAttendance(name);
+    input.value = "";
+  }
+}
+
 // Fetch attendance list
 function fetchAttendance() {
   fetch("/attendance")
@@ -66,9 +82,9 @@ function fetchAttendance() {
       if (data.length === 0) {
         list.innerHTML = "<li style='color: #aaa;'>No attendance recorded yet</li>";
       } else {
-        data.forEach(name => {
+        data.forEach(entry => {
           const li = document.createElement("li");
-          li.textContent = name;
+          li.textContent = `${entry.name} – ${entry.time}`;
           list.appendChild(li);
         });
       }
