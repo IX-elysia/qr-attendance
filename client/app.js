@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => (alertBanner.style.display = "none"), 2000);
   }
 
-  // Load saved attendance from localStorage
+  // Load saved attendance
   loadAttendance();
 
   // Start Camera
@@ -73,7 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Refresh List
   refreshBtn.addEventListener("click", () => {
-    // Instead of clearing, just reload from storage
     loadAttendance();
   });
 
@@ -84,24 +83,35 @@ document.addEventListener("DOMContentLoaded", () => {
     updateStats();
   });
 
-  // Export Placeholder
+  // ✅ Export to Excel
   exportBtn.addEventListener("click", () => {
-    alert("Export to Excel coming soon!");
+    const attendance = getAttendance();
+    if (attendance.length === 0) {
+      alert("No attendance data to export!");
+      return;
+    }
+
+    const ws_data = [["Name", "Time"]];
+    attendance.forEach(entry => {
+      ws_data.push([entry.name, entry.time]);
+    });
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(ws_data);
+    XLSX.utils.book_append_sheet(wb, ws, "Attendance");
+
+    XLSX.writeFile(wb, "attendance.xlsx");
   });
 });
 
 // --- Attendance ---
 function recordAttendance(name) {
-  const list = document.getElementById("attendance-list");
-
-  // Save attendance entry
   const attendance = getAttendance();
   attendance.push({
     name,
     time: new Date().toLocaleTimeString()
   });
   localStorage.setItem("attendance", JSON.stringify(attendance));
-
   renderAttendance(attendance);
 }
 
