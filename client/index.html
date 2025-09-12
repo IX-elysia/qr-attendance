@@ -1,44 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>QGHS Teacher Attendance</title>
   <link rel="stylesheet" href="style.css">
+
+  <!-- html5-qrcode (minified) -->
   <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 </head>
 <body>
   <header class="header">
-    <h1>QGHS Teacher Attendance</h1>
+    <h1>📘 QGHS Teacher Attendance</h1>
   </header>
 
   <main class="container">
     <!-- Scanner -->
     <section class="card">
       <h2>QR Scanner</h2>
-      <div id="qr-reader" class="qr-box"></div>
-      <div class="button-group">
-        <button id="startCamera">Start Camera</button>
-        <button id="stopCamera">Stop Camera</button>
+      <div id="qr-reader" class="qr-box">
+        <div class="placeholder">📷 Camera preview will appear here</div>
       </div>
+
+      <div class="button-group">
+        <button id="startCamera" class="btn">Start Camera</button>
+        <button id="stopCamera" class="btn" disabled>Stop Camera</button>
+      </div>
+
+      <p id="scanStatus" class="status">Status: idle</p>
     </section>
 
     <!-- Manual Input -->
     <section class="card">
       <h2>Manual Input</h2>
-      <input type="text" id="manualName" placeholder="Enter teacher name">
-      <button id="addManual">Add</button>
+      <input id="manualName" type="text" placeholder="Enter teacher name" />
+      <div class="button-group">
+        <button id="addManual" class="btn">Add</button>
+      </div>
     </section>
 
     <!-- Attendance List -->
     <section class="card">
       <h2>Attendance List</h2>
       <div class="button-group">
-        <button id="refreshBtn">Refresh</button>
-        <button id="clearBtn">Clear</button>
-        <button id="exportBtn">Export to Excel</button>
+        <button id="refreshBtn" class="btn">Refresh</button>
+        <button id="clearBtn" class="btn danger">Clear</button>
+        <button id="exportBtn" class="btn">Export</button>
       </div>
-      <ul id="attendanceList"></ul>
-      <p id="attendanceSummary">No data yet.</p>
+      <ul id="attendanceList" class="attendance-list"></ul>
+      <p id="attendanceSummary" class="status">No data yet.</p>
     </section>
   </main>
 
