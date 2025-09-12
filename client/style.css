@@ -51,21 +51,27 @@ h2 {
   background: #fafafa;
 }
 
+/* Button container */
+.button-group {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
 button {
   background: maroon;
   color: white;
   border: none;
-  padding: 10px 16px;
-  margin: 6px;
-  border-radius: 10px;
-  font-size: 0.95rem;
+  padding: 10px 15px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: background 0.2s ease-in-out;
 }
 
 button:hover {
   background: #8b0000;
-  transform: scale(1.05);
 }
 
 input {

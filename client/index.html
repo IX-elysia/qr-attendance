@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QGHS Teacher Attendance</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Load QR Scanner Library BEFORE app.js -->
+  <!-- QR Scanner Library -->
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
 <body>
@@ -18,33 +18,41 @@
     <section class="card">
       <h2>Scan QR Code</h2>
       <div id="reader"></div>
-      <button id="start-camera">Start Camera</button>
-      <button id="stop-camera">Stop Camera</button>
+      <div class="button-group">
+        <button id="start-camera">Start Camera</button>
+        <button id="stop-camera">Stop Camera</button>
+      </div>
     </section>
 
     <!-- Manual Input -->
     <section class="card">
       <h2>Manual Input</h2>
       <input type="text" id="manual-name" placeholder="Enter teacher name">
-      <button id="add-manual">Add</button>
+      <div class="button-group">
+        <button id="add-manual">Add</button>
+      </div>
     </section>
 
     <!-- Attendance List -->
     <section class="card">
       <h2>Attendance List</h2>
       <ul id="attendance-list"></ul>
-      <button id="refresh-list">Refresh</button>
-      <button id="clear-list">Clear</button>
+      <div class="button-group">
+        <button id="refresh-list">Refresh</button>
+        <button id="clear-list">Clear</button>
+      </div>
     </section>
 
     <!-- Export Section -->
     <section class="card">
       <h2>Export</h2>
-      <button id="export-btn">Export to Excel</button>
+      <div class="button-group">
+        <button id="export-btn">Export to Excel</button>
+      </div>
     </section>
   </main>
 
-  <!-- Must load after library -->
+  <!-- App logic -->
   <script src="app.js"></script>
 </body>
 </html>
