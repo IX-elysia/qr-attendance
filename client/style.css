@@ -1,43 +1,91 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f8f8f8;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f4f4f9;
   margin: 0;
   padding: 0;
-  text-align: center;
 }
 
 header {
   background: maroon;
   color: white;
   padding: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
+  text-align: center;
+  letter-spacing: 1px;
 }
 
 main {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 20px;
   padding: 20px;
 }
 
 .card {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 14px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
   padding: 20px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+h2 {
+  margin-top: 0;
+  color: maroon;
+  font-size: 1.2rem;
+  border-bottom: 2px solid maroon;
+  padding-bottom: 5px;
+}
+
+#reader {
+  width: 100%;
+  height: 300px;
+  border: 2px dashed maroon;
+  border-radius: 10px;
+  margin: 10px auto;
+  background: #fafafa;
 }
 
 button {
   background: maroon;
   color: white;
   border: none;
-  padding: 10px 15px;
-  margin: 5px;
-  border-radius: 8px;
+  padding: 10px 16px;
+  margin: 6px;
+  border-radius: 10px;
+  font-size: 0.95rem;
   cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
 }
 
 button:hover {
   background: #8b0000;
+  transform: scale(1.05);
+}
+
+input {
+  padding: 10px;
+  width: 80%;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  background: #f9f9f9;
+  margin: 6px 0;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: left;
+  border-left: 5px solid maroon;
 }
