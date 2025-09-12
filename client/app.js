@@ -3,7 +3,6 @@ window.onload = function () {
 
   // Start Camera
   document.getElementById("startCamera").addEventListener("click", () => {
-    console.log("Start Camera button clicked!");
     if (!qrScanner) {
       qrScanner = new Html5Qrcode("qr-reader");
     }

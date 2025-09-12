@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>QGHS Teacher Attendance</title>
   <link rel="stylesheet" href="style.css">
-  <!-- QR Code library -->
   <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 </head>
 <body>
@@ -13,7 +12,7 @@
   </header>
 
   <main class="container">
-    <!-- Scanner Section -->
+    <!-- Scanner -->
     <section class="card">
       <h2>QR Scanner</h2>
       <div id="qr-reader" class="qr-box"></div>
@@ -36,19 +35,13 @@
       <div class="button-group">
         <button id="refreshBtn">Refresh</button>
         <button id="clearBtn">Clear</button>
+        <button id="exportBtn">Export to Excel</button>
       </div>
       <ul id="attendanceList"></ul>
-    </section>
-
-    <!-- Export + Summary -->
-    <section class="card">
-      <h2>Export & Summary</h2>
-      <button id="exportBtn">Export to Excel</button>
       <p id="attendanceSummary">No data yet.</p>
     </section>
   </main>
 
-  <!-- Main Script -->
   <script src="app.js"></script>
 </body>
 </html>
