@@ -69,3 +69,12 @@ function recordAttendance(name) {
   item.textContent = `${name} - Recorded at ${new Date().toLocaleTimeString()}`;
   list.appendChild(item);
 }
+
+// --- Tab navigation ---
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-content").forEach(sec => sec.classList.remove("active"));
+    const target = btn.getAttribute("data-target");
+    document.getElementById(target).classList.add("active");
+  });
+});
