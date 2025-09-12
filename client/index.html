@@ -2,61 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QGHS Teacher Attendance</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/html5-qrcode"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>📷 QGHS Teacher Attendance</h1>
+  <header class="header">
+    <h1>QGHS Teacher Attendance</h1>
   </header>
 
-  <nav>
-    <button onclick="showSection('scan')">Scan</button>
-    <button onclick="showSection('attendance')">Attendance</button>
-    <button onclick="showSection('export')">Export</button>
-    <button onclick="showSection('generator')">Generate QR</button>
-  </nav>
-
-  <main>
-    <!-- Scan -->
-    <section id="scan" class="active">
-      <h2>Scan QR Code</h2>
-      <button id="start-camera">Start Camera</button>
-      <button id="stop-camera">Stop Camera</button>
-      <div id="qr-reader"></div>
-      <div id="manual-entry">
-        <input type="text" id="manual-name" placeholder="Enter teacher name">
-        <button id="add-manual">Add</button>
-      </div>
+  <main class="container">
+    <!-- Scanner Section -->
+    <section class="card">
+      <h2>QR Scanner</h2>
+      <div id="qr-reader" class="qr-box"></div>
+      <button id="startCamera">Start Camera</button>
+      <button id="stopCamera">Stop Camera</button>
     </section>
 
-    <!-- Attendance -->
-    <section id="attendance">
+    <!-- Manual Input -->
+    <section class="card">
+      <h2>Manual Input</h2>
+      <input type="text" id="manualName" placeholder="Enter teacher name">
+      <button id="addManual">Add</button>
+    </section>
+
+    <!-- Attendance List -->
+    <section class="card">
       <h2>Attendance List</h2>
-      <div id="attendance-summary">
-        <p><strong>Total Attendees:</strong> <span id="attendee-count">0</span></p>
-        <p><strong>Attendance Rate:</strong> <span id="attendance-rate">0%</span></p>
-      </div>
-      <ul id="attendance-list"></ul>
-      <button id="clear-attendance">Clear Attendance</button>
+      <button id="refreshBtn">Refresh</button>
+      <button id="clearBtn">Clear</button>
+      <ul id="attendanceList"></ul>
     </section>
 
-    <!-- Export -->
-    <section id="export">
-      <h2>Export Attendance Data</h2>
-      <p>Download attendance records as Excel (CSV).</p>
-      <button id="export-btn">Export to Excel</button>
-    </section>
-
-    <!-- Generator -->
-    <section id="generator">
-      <h2>Generate Teacher QR Code</h2>
-      <input type="text" id="qr-input" placeholder="Enter teacher name">
-      <button id="generate-qr">Generate</button>
-      <div id="qrcode"></div>
+    <!-- Export + Summary -->
+    <section class="card">
+      <h2>Export & Summary</h2>
+      <button id="exportBtn">Export to Excel</button>
+      <p id="attendanceSummary">No data yet.</p>
     </section>
   </main>
 
