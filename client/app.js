@@ -10,6 +10,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearBtn = document.getElementById("clear-list");
   const refreshBtn = document.getElementById("refresh-list");
 
+  // Create alert banner for scans
+  const alertBanner = document.createElement("div");
+  alertBanner.id = "scan-alert";
+  alertBanner.style.position = "fixed";
+  alertBanner.style.top = "20px";
+  alertBanner.style.left = "50%";
+  alertBanner.style.transform = "translateX(-50%)";
+  alertBanner.style.padding = "10px 20px";
+  alertBanner.style.backgroundColor = "maroon";
+  alertBanner.style.color = "white";
+  alertBanner.style.fontWeight = "bold";
+  alertBanner.style.borderRadius = "8px";
+  alertBanner.style.display = "none";
+  alertBanner.style.zIndex = "9999";
+  document.body.appendChild(alertBanner);
+
+  function showAlert(message) {
+    alertBanner.textContent = message;
+    alertBanner.style.display = "block";
+    setTimeout(() => {
+      alertBanner.style.display = "none";
+    }, 2000); // hide after 2 seconds
+  }
+
   // Start Camera
   startBtn.addEventListener("click", () => {
     if (!html5QrCode) {
@@ -17,11 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     html5QrCode.start(
       { facingMode: "environment" },
-      { fps: 10, qrbox: 250 },
+      { fps: 10, qrbox: { width: 300, height: 300 } },
       qrCodeMessage => {
         const now = Date.now();
         if (now - lastScanTime > scanCooldown) {
           recordAttendance(qrCodeMessage);
+          showAlert(`✅ Scanned: ${qrCodeMessage}`);
           lastScanTime = now;
         }
       }
@@ -42,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const manualName = document.getElementById("manual-name").value.trim();
     if (manualName) {
       recordAttendance(manualName);
+      showAlert(`✏️ Added manually: ${manualName}`);
       document.getElementById("manual-name").value = "";
     }
   });
