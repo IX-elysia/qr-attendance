@@ -1,20 +1,22 @@
+/* General Layout */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f8f8f8;
+  background-color: #ffffff;
   margin: 0;
   padding: 0;
+  color: #333;
   text-align: center;
 }
 
 header {
-  background: maroon;
+  background-color: maroon;
   color: white;
-  padding: 1rem;
+  padding: 15px;
 }
 
 header h1 {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: 24px;
 }
 
 nav {
@@ -22,93 +24,89 @@ nav {
 }
 
 nav button {
-  background: white;
+  background-color: white;
   color: maroon;
   border: 2px solid maroon;
-  padding: 8px 15px;
+  padding: 8px 16px;
   margin: 5px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
 }
-
 nav button:hover {
-  background: maroon;
+  background-color: maroon;
   color: white;
 }
 
-main {
-  padding: 20px;
-}
-
+/* Sections */
 .tab-content {
   display: none;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   padding: 20px;
-  margin-top: 20px;
 }
-
 .tab-content.active {
   display: block;
 }
 
-#reader {
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-.button-group {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-button {
-  background: maroon;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out;
-}
-
-button:hover {
-  background: #8b0000;
-}
-
-/* Scan alert banner */
-.alert {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 8px;
-  display: none;
-  font-weight: bold;
-}
-
-.alert.success {
-  background: #d4edda;
-  color: #155724;
-  display: block;
-}
-
+/* QR Reader Box */
 #reader {
   width: 100%;
   max-width: 400px;
   height: 300px;
-  margin: 0 auto;
+  margin: 20px auto;
   border: 3px solid maroon;
   border-radius: 12px;
   background: #f9f9f9;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Buttons */
+.button-group {
+  margin-top: 15px;
+}
+button {
+  background-color: maroon;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  margin: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+button:hover {
+  background-color: #a00000;
+}
+
+/* Attendance Stats */
+.stats-box {
+  background-color: maroon;
+  color: white;
+  padding: 15px;
+  margin: 15px auto;
+  border-radius: 10px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.stats-box h3 {
+  margin-bottom: 10px;
+}
+.stats-box p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+/* Attendance List */
+#attendance-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+  max-width: 400px;
+  text-align: left;
+}
+#attendance-list li {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
 }
