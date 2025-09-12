@@ -18,6 +18,11 @@ if (fs.existsSync(dataFile)) {
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "client")));
 
+app.get("/export-page", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "export.html"));
+});
+
+
 // Save attendance to JSON file
 function saveAttendance() {
   fs.writeFileSync(dataFile, JSON.stringify(attendance, null, 2));
