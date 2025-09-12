@@ -80,22 +80,30 @@ button:hover {
 }
 
 /* Attendance Stats */
+.stats-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px auto;
+  flex-wrap: wrap;
+}
 .stats-box {
   background-color: maroon;
   color: white;
-  padding: 15px;
-  margin: 15px auto;
-  border-radius: 10px;
-  max-width: 400px;
+  padding: 20px;
+  border-radius: 12px;
+  width: 160px;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 .stats-box h3 {
   margin-bottom: 10px;
+  font-size: 16px;
 }
 .stats-box p {
-  margin: 5px 0;
-  font-size: 16px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 /* Attendance List */

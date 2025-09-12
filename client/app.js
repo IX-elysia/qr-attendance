@@ -1,9 +1,7 @@
 let html5QrCode;
 let lastScanTime = 0;
-const scanCooldown = 3000; // 3 seconds between scans
-
-// --- Adjust this for your total roster size (example: 50 teachers) ---
-const TOTAL_TEACHERS = 50;
+const scanCooldown = 3000; // 3 seconds cooldown
+const TOTAL_TEACHERS = 50; // adjust for your roster
 
 document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.getElementById("start-camera");
@@ -12,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearBtn = document.getElementById("clear-list");
   const refreshBtn = document.getElementById("refresh-list");
 
-  // Alert banner for scans
+  // Alert banner
   const alertBanner = document.createElement("div");
   alertBanner.id = "scan-alert";
   Object.assign(alertBanner.style, {
@@ -76,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateStats();
   });
 
-  // Export (placeholder – backend handles real export)
+  // Export Placeholder
   exportBtn.addEventListener("click", () => {
     alert("Export to Excel coming soon!");
   });
