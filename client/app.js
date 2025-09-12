@@ -10,6 +10,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearBtn = document.getElementById("clear-list");
   const refreshBtn = document.getElementById("refresh-list");
 
+  // Insert scanner overlay inside reader
+  const reader = document.getElementById("reader");
+  const scanBox = document.createElement("div");
+  scanBox.className = "scan-box";
+  reader.appendChild(scanBox);
+
   // Alert banner
   const alertBanner = document.createElement("div");
   alertBanner.id = "scan-alert";
@@ -34,6 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => (alertBanner.style.display = "none"), 2000);
   }
 
+  // Load saved attendance from localStorage
+  loadAttendance();
+
   // Start Camera
   startBtn.addEventListener("click", () => {
     if (!html5QrCode) {
@@ -41,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     html5QrCode.start(
       { facingMode: "environment" },
-      { fps: 10, qrbox: { width: 300, height: 300 } },
+      { fps: 10, qrbox: { width: 250, height: 250 } },
       qrCodeMessage => {
         const now = Date.now();
         if (now - lastScanTime > scanCooldown) {
@@ -64,13 +73,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Refresh List
   refreshBtn.addEventListener("click", () => {
-    document.getElementById("attendance-list").innerHTML = "";
-    updateStats();
+    // Instead of clearing, just reload from storage
+    loadAttendance();
   });
 
   // Clear List
   clearBtn.addEventListener("click", () => {
     document.getElementById("attendance-list").innerHTML = "";
+    localStorage.removeItem("attendance");
     updateStats();
   });
 
@@ -83,14 +93,40 @@ document.addEventListener("DOMContentLoaded", () => {
 // --- Attendance ---
 function recordAttendance(name) {
   const list = document.getElementById("attendance-list");
-  const item = document.createElement("li");
-  item.textContent = `${name} - Recorded at ${new Date().toLocaleTimeString()}`;
-  list.appendChild(item);
+
+  // Save attendance entry
+  const attendance = getAttendance();
+  attendance.push({
+    name,
+    time: new Date().toLocaleTimeString()
+  });
+  localStorage.setItem("attendance", JSON.stringify(attendance));
+
+  renderAttendance(attendance);
+}
+
+function loadAttendance() {
+  const attendance = getAttendance();
+  renderAttendance(attendance);
+}
+
+function renderAttendance(attendance) {
+  const list = document.getElementById("attendance-list");
+  list.innerHTML = "";
+  attendance.forEach(entry => {
+    const item = document.createElement("li");
+    item.textContent = `${entry.name} - Recorded at ${entry.time}`;
+    list.appendChild(item);
+  });
   updateStats();
 }
 
+function getAttendance() {
+  return JSON.parse(localStorage.getItem("attendance")) || [];
+}
+
 function updateStats() {
-  const totalScanned = document.querySelectorAll("#attendance-list li").length;
+  const totalScanned = getAttendance().length;
   const percent = TOTAL_TEACHERS > 0 ? ((totalScanned / TOTAL_TEACHERS) * 100).toFixed(1) : 0;
 
   document.getElementById("total-attendees").textContent = totalScanned;
