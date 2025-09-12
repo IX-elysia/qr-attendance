@@ -1,172 +1,108 @@
-/* --- Basic layout --- */
-:root {
-  --maroon: #800000;
-  --maroon-dark: #5c0000;
-  --muted: #666;
-}
-
-* { box-sizing: border-box; }
 body {
-  margin: 0;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background: #fbfbfb;
-  color: #222;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Header & tabs */
-.topbar {
-  background: var(--maroon);
-  color: white;
-  padding: 18px 12px;
-  text-align: center;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-.topbar h1 {
-  margin: 0;
-  font-size: 1.25rem;
-  letter-spacing: 0.6px;
-}
-
-.tabs {
-  margin-top: 10px;
-}
-.tab-btn {
-  background: white;
-  color: var(--maroon);
-  border: 2px solid var(--maroon);
-  padding: 8px 14px;
-  margin: 0 6px;
-  border-radius: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all .14s ease;
-}
-.tab-btn.active {
-  background: linear-gradient(180deg, var(--maroon), var(--maroon-dark));
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(128,0,0,0.18);
-}
-
-/* Container: center content, not stacked full width */
-.container {
-  max-width: 820px;
-  margin: 22px auto;
-  padding: 0 16px 60px;
-}
-
-/* Tab pages (only one visible) */
-.tab {
-  display: none;
-  margin-top: 8px;
-  background: white;
-  border-radius: 12px;
-  padding: 18px;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.06);
-}
-.tab.visible { display: block; }
-
-/* QR box */
-.qr-box {
-  width: 360px;
-  height: 360px;
-  margin: 0 auto 14px;
-  border-radius: 12px;
-  border: 3px solid var(--maroon);
-  overflow: hidden;
-  background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.qr-box .placeholder { color: #bdbdbd; }
-
-/* make camera feed fully fill the box */
-#qr-reader video {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover;
-}
-
-/* Controls & Buttons */
-.controls, .generator-actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 10px 0;
-}
-.btn {
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  font-weight: 700;
-}
-.btn.primary {
-  background: var(--maroon);
-  color: white;
-  box-shadow: 0 6px 14px rgba(128,0,0,0.12);
-}
-.btn.danger {
-  background: #c33;
-  color: #fff;
-}
-.btn:hover { transform: translateY(-2px); }
-
-/* Manual input */
-.manual {
-  margin-top: 12px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-.manual input {
-  padding: 10px;
-  border-radius: 999px;
-  border: 1px solid #ddd;
-  width: 240px;
-}
-
-/* Attendance card & list */
-.attendance-card { max-width: 640px; margin: 0 auto; }
-.count { text-align: center; color: var(--maroon); font-weight: 700; margin-bottom: 8px; }
-.attendance-list { list-style: none; padding: 0; margin: 0 auto; max-width: 640px; text-align: left; }
-.attendance-list li {
+  font-family: Arial, sans-serif;
   background: #fff;
-  border: 1px solid #eee;
-  padding: 10px;
-  margin: 6px 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  color: #333;
+  text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
-/* QR generator */
-.generator-card { max-width: 640px; margin: 0 auto; }
-#qrcode { display:flex; justify-content:center; margin-top: 12px; }
-#qrcode canvas { border-radius: 8px; background: white; }
-
-/* Toast */
-.toast {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 28px;
-  background: var(--maroon);
+header {
+  background: maroon;
   color: white;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: 700;
-  z-index: 1000;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s ease, transform .2s ease;
+  padding: 1rem;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
-.toast.show {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(-6px);
+
+nav {
+  margin: 1rem;
+}
+
+nav button {
+  background: maroon;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+nav button:hover {
+  background: #a00000;
+}
+
+main {
+  max-width: 700px;
+  margin: auto;
+  padding: 1rem;
+}
+
+main section {
+  display: none;
+  background: #fdfdfd;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+main section.active {
+  display: block;
+}
+
+#qr-reader {
+  width: 300px;
+  height: 300px;
+  margin: 1rem auto;
+  border: 2px solid maroon;
+  border-radius: 12px;
+  background: #f8f8f8;
+}
+
+#manual-entry {
+  margin-top: 1rem;
+}
+
+#manual-entry input {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#manual-entry button {
+  background: maroon;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-left: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#attendance-summary {
+  background: #fff0f0;
+  border: 1px solid maroon;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  color: maroon;
+}
+
+#attendance-list {
+  text-align: left;
+  margin-top: 1rem;
+  padding-left: 1rem;
+}
+
+#attendance-list li {
+  margin: 4px 0;
+  padding: 4px;
+  border-bottom: 1px solid #ddd;
+}
+
+#qrcode {
+  margin-top: 1rem;
 }
