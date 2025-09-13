@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 
 let attendance = [];
 
-// --- Load saved attendance ---
+// Load saved attendance
 const dataFile = path.join(__dirname, "attendance.json");
 if (fs.existsSync(dataFile)) {
   attendance = JSON.parse(fs.readFileSync(dataFile));
@@ -18,25 +18,27 @@ if (fs.existsSync(dataFile)) {
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "client")));
 
-// --- Routes for pages ---
+// Main Scanner page
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "index.html")); // Scanner
+  res.sendFile(path.join(__dirname, "client", "index.html"));
 });
 
+// QR Generator page
 app.get("/generator", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "generator.html")); // QR Generator
+  res.sendFile(path.join(__dirname, "client", "generator.html"));
 });
 
+// (Optional) Export page — only if you want a separate UI
 app.get("/export-page", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "export.html")); // Export page
+  res.sendFile(path.join(__dirname, "client", "export.html"));
 });
 
-// --- Helper: Save attendance ---
+// Save attendance
 function saveAttendance() {
   fs.writeFileSync(dataFile, JSON.stringify(attendance, null, 2));
 }
 
-// --- Record attendance ---
+// Record attendance
 app.post("/attendance", (req, res) => {
   const { name } = req.body;
 
@@ -62,19 +64,19 @@ app.post("/attendance", (req, res) => {
   res.json(entry);
 });
 
-// --- Get attendance list ---
+// Get attendance list
 app.get("/attendance", (req, res) => {
   res.json(attendance);
 });
 
-// --- Clear attendance ---
+// Clear attendance
 app.delete("/attendance", (req, res) => {
   attendance = [];
   saveAttendance();
   res.sendStatus(200);
 });
 
-// --- Export attendance to Excel ---
+// Export attendance to Excel
 app.get("/export", async (req, res) => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Attendance");
@@ -102,7 +104,7 @@ app.get("/export", async (req, res) => {
   res.end();
 });
 
-// --- Start server ---
+// Start server
 app.listen(PORT, () =>
   console.log(`✅ Server running on http://localhost:${PORT}`)
 );
