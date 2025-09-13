@@ -1,97 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>QGHS Teacher Attendance</title>
-
-  <!-- unified classy stylesheet -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Attendance Scanner</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- html5-qrcode library (must load before app.js) -->
-  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js" defer></script>
-
-  <!-- main client logic -->
-  <script src="app.js" defer></script>
+  <!-- QR Scanner Library -->
+  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-left">
-      <h1>QGHS Teacher Attendance</h1>
-    </div>
-    <nav class="top-nav">
-      <button class="tab-btn" data-target="scanner">Scanner</button>
-      <button class="tab-btn" data-target="attendance">Attendance</button>
-      <button class="tab-btn" data-target="export">Export</button>
-      <a class="nav-link" href="/generator">QR Generator</a>
-    </nav>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo">QGHS Attendance</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Scanner</a></li>
+      <li><a href="attendance.html">Attendance</a></li>
+      <li><a href="export.html">Export</a></li>
+      <li><a href="generator.html">QR Generator</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page Header -->
+  <header>
+    <h1>QR Attendance Scanner</h1>
+    <p class="subtitle">Scan student/teacher QR codes to record attendance</p>
   </header>
 
-  <!-- small top alert for scan success / errors -->
-  <div id="page-alert" class="page-alert" aria-hidden="true"></div>
+  <!-- Scanner Section -->
+  <main>
+    <section class="scanner-section">
+      <h2>Live Scanner</h2>
 
-  <main class="main-grid">
-    <!-- SCANNER -->
-    <section id="scanner" class="tab-content active card">
-      <h2>Scanner</h2>
-      <div class="controls-row">
-        <label for="camera-select">Camera</label>
-        <select id="camera-select" class="select"></select>
-        <button id="start-camera" class="btn">Start Camera</button>
-        <button id="stop-camera" class="btn danger" disabled>Stop Camera</button>
+      <!-- Camera Selection -->
+      <label for="camera-select">Choose Camera:</label>
+      <select id="camera-select"></select>
+
+      <!-- Scanner Box -->
+      <div id="reader"></div>
+
+      <!-- Warning/Status -->
+      <p id="scan-warning" class="warning"></p>
+
+      <!-- Buttons -->
+      <div class="button-group">
+        <button id="start-scan">Start Scanner</button>
+        <button id="stop-scan">Stop Scanner</button>
+        <button id="clear-attendance">Clear Attendance</button>
       </div>
-
-      <div id="reader" class="reader-box">
-        <div class="scan-overlay"></div>
-      </div>
-
-      <div class="controls-row" style="margin-top:12px;">
-        <input id="manual-name" class="input" placeholder="(Optional) Enter name manually">
-        <button id="add-manual" class="btn">Add</button>
-      </div>
-
-      <p class="muted">Tip: If your USB webcam is connected, select it from the camera dropdown and click Start.</p>
-    </section>
-
-    <!-- ATTENDANCE -->
-    <section id="attendance" class="tab-content card">
-      <h2>Attendance</h2>
-
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-title">Total Attendees</div>
-          <div id="total-attendees" class="stat-value">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-title">Attendance %</div>
-          <div id="attendance-percent" class="stat-value">0%</div>
-        </div>
-      </div>
-
-      <div class="list-card">
-        <h3 class="list-title">Attendance List</h3>
-        <ul id="attendance-list" class="attendance-list" aria-live="polite"></ul>
-
-        <div class="controls-row">
-          <button id="refresh-list" class="btn">Refresh</button>
-          <button id="clear-list" class="btn danger">Clear</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- EXPORT -->
-    <section id="export" class="tab-content card">
-      <h2>Export</h2>
-      <p>Click to download the attendance as an Excel file (XLSX).</p>
-      <div class="controls-row">
-        <button id="export-btn" class="btn success">Export to Excel</button>
-      </div>
-      <p class="muted">Note: export uses your server endpoint <code>/export</code>.</p>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <small>QGHS • Teacher Attendance</small>
-  </footer>
+  <script src="app.js"></script>
 </body>
 </html>
