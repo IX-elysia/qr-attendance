@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QGHS QR Generator</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Generator</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
-<body class="generator-body">
-  <header class="header">
-    <h1>QGHS QR Generator</h1>
-    <p class="subtitle">Generate your QR codes here</p>
+<body>
+  <header>
+    <h1>Generate our Qr Code Here!</h1>
   </header>
 
-  <main class="container">
-    <!-- Input Section -->
-    <section class="card">
-      <h2>Enter Teacher's Name</h2>
-      <input type="text" id="teacher-name" placeholder="Type name here..." />
-      <button id="generate-btn" class="btn">Generate QR</button>
+  <main>
+    <!-- Generator Input -->
+    <section class="card generator-card">
+      <h2>Create a QR Code</h2>
+      <input type="text" id="qr-input" placeholder="Enter text or name here...">
+      <button id="generate-btn" class="btn success">Generate QR</button>
     </section>
 
-    <!-- QR Preview -->
-    <section class="card qr-section">
+    <!-- Generated QR -->
+    <section class="card qr-preview">
       <h2>QR Preview</h2>
-      <div id="qr-preview"></div>
-      <button id="download-btn" class="btn" disabled>Download QR</button>
-    </section>
-
-    <!-- History -->
-    <section class="card">
-      <h2>Recent QR Codes</h2>
-      <div id="history" class="history-grid"></div>
+      <div id="qrcode"></div>
     </section>
   </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="generator.js"></script>
+  <footer>
+    <p>School Of Love and Excellence</p>
+  </footer>
+
+  <script>
+    document.getElementById("generate-btn").addEventListener("click", () => {
+      const input = document.getElementById("qr-input").value.trim();
+      if (!input) return alert("Please enter text!");
+      document.getElementById("qrcode").innerHTML = "";
+      new QRCode(document.getElementById("qrcode"), {
+        text: input,
+        width: 200,
+        height: 200,
+      });
+    });
+  </script>
 </body>
 </html>

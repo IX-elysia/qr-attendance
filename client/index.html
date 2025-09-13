@@ -3,48 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QGHS Teacher Attendance</title>
+  <title>QR Attendance Scanner</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>QGHS Teacher Attendance</h1>
+  <header>
+    <h1>QGHS Atendance Scanner</h1>
+  </header>
 
-    <!-- Camera Controls -->
-    <div class="controls">
-      <label for="camera-select">🎥 Choose Camera:</label>
-      <select id="camera-select"></select>
-      <button id="start-camera">Start Camera</button>
-      <button id="stop-camera">Stop Camera</button>
-    </div>
-
-    <!-- Scanner Box -->
-    <div id="reader"></div>
+  <main>
+    <!-- Scanner Section -->
+    <section class="card scanner-card">
+      <h2>Scanner</h2>
+      <div id="reader"></div>
+      <div class="scanner-buttons">
+        <button id="start-camera" class="btn">Start Camera</button>
+        <button id="stop-camera" class="btn danger">Stop Camera</button>
+      </div>
+    </section>
 
     <!-- Stats Section -->
-    <div class="stats">
-      <div class="stat-box">
-        <h2>Total Attendees</h2>
-        <p id="total-attendees">0</p>
+    <section class="card stats-card">
+      <h2>Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <h3>Total Attendees</h3>
+          <p id="total-attendees">0</p>
+        </div>
+        <div class="stat-box">
+          <h3>Average %</h3>
+          <p id="average-percent">0%</p>
+        </div>
       </div>
-      <div class="stat-box">
-        <h2>Average %</h2>
-        <p id="average-percent">0%</p>
-      </div>
-    </div>
+    </section>
 
     <!-- Attendance List -->
-    <h2>Attendance List</h2>
-    <ul id="attendance-list"></ul>
+    <section class="card list-card">
+      <h2>Attendance List</h2>
+      <ul id="attendance-list"></ul>
+      <div class="list-buttons">
+        <button id="refresh-list" class="btn">Refresh</button>
+        <button id="clear-list" class="btn danger">Clear</button>
+        <button id="export-btn" class="btn success">Export</button>
+      </div>
+    </section>
+  </main>
 
-    <!-- Actions -->
-    <div class="actions">
-      <button id="refresh-list">🔄 Refresh</button>
-      <button id="clear-list">🗑️ Clear</button>
-      <button id="export-btn">📥 Export</button>
-    </div>
-  </div>
+  <footer>
+    <p>School Of Love and Excellence</p>
+  </footer>
 
   <script src="app.js"></script>
 </body>
