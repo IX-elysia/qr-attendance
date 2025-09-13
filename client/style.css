@@ -1,102 +1,39 @@
-/* General */
-body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  background: #fdfdfd;
-  color: #333;
-  text-align: center;
-}
-
-header {
-  background: maroon;
-  color: white;
-  padding: 1rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-nav {
-  margin: 1rem 0;
-}
-nav button {
-  background: maroon;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  margin: 0 0.4rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-nav button:hover {
-  background: #800000;
-}
-
-.container {
-  max-width: 500px;
-  margin: auto;
-  padding: 1rem;
-}
-
-.card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  padding: 1.5rem;
-}
-
-h2 {
-  color: maroon;
-  margin-bottom: 1rem;
-}
-
+/* Scanner box */
 #reader {
   position: relative;
   width: 100%;
-  aspect-ratio: 1/1;
+  max-width: 320px;   /* smaller box */
+  height: 300px;      /* fixed height */
+  margin: 1rem auto;
   background: #f8f0f0;
   border: 3px solid maroon;
   border-radius: 12px;
   overflow: hidden;
-  margin-bottom: 1rem;
 }
 
-/* QR guide (white box in the middle) */
+/* Force the video inside html5-qrcode to cover the box */
+#reader video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Hide default red line from library */
+#reader__scan_region img,
+#reader__scan_region canvas {
+  display: none !important;
+}
+
+/* Custom maroon guide box */
 .qr-guide {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 50%;
-  height: 50%;
+  width: 60%;
+  height: 60%;
   border: 2px dashed maroon;
   border-radius: 8px;
   transform: translate(-50%, -50%);
   pointer-events: none;
-}
-
-/* Controls */
-#scanner-controls {
-  margin-top: 1rem;
-}
-#scanner-controls button {
-  margin: 0.5rem;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  background: maroon;
-  color: white;
-  cursor: pointer;
-}
-#scanner-controls button:hover {
-  background: #800000;
-}
-
-/* Camera dropdown */
-.camera-select {
-  margin: 0.8rem 0;
-}
-select {
-  padding: 0.4rem;
-  border-radius: 6px;
-  border: 1px solid #aaa;
 }
