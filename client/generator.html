@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QGHS QR Generator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="generator-body">
+  <header class="header">
+    <h1>QGHS QR Generator</h1>
+    <p class="subtitle">Generate elegant QR codes for teachers</p>
+  </header>
+
+  <main class="container">
+    <!-- Input Section -->
+    <section class="card">
+      <h2>Enter Teacher's Name</h2>
+      <input type="text" id="teacher-name" placeholder="Type name here..." />
+      <button id="generate-btn" class="btn">Generate QR</button>
+    </section>
+
+    <!-- QR Preview -->
+    <section class="card qr-section">
+      <h2>QR Preview</h2>
+      <div id="qr-preview"></div>
+      <button id="download-btn" class="btn" disabled>Download QR</button>
+    </section>
+
+    <!-- History -->
+    <section class="card">
+      <h2>Recent QR Codes</h2>
+      <div id="history" class="history-grid"></div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="generator.js"></script>
+</body>
+</html>

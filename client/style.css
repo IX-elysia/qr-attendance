@@ -129,3 +129,112 @@ button:hover {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
   pointer-events: none;
 }
+
+/* ---------------- QR Generator Styles ---------------- */
+.generator-body {
+  font-family: "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #4b0000, #800000, #b22222);
+  color: #333;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #fff;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem;
+  display: grid;
+  gap: 2rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+  color: #800000;
+}
+
+input[type="text"] {
+  padding: 0.8rem;
+  width: 80%;
+  border: 2px solid #800000;
+  border-radius: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.btn {
+  background: #800000;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn:hover {
+  background: #b22222;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(128, 0, 0, 0.6);
+}
+
+.btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#qr-preview {
+  margin: 1rem 0;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.history-item {
+  background: #fff3f3;
+  padding: 0.5rem;
+  border: 1px solid #800000;
+  border-radius: 0.75rem;
+  text-align: center;
+}
+
+.history-item img {
+  max-width: 100px;
+  display: block;
+  margin: auto;
+  border-radius: 0.5rem;
+}
