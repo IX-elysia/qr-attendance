@@ -8,10 +8,10 @@
   <!-- unified classy stylesheet -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- html5-qrcode library — loaded before app.js (deferred, executes in order) -->
+  <!-- html5-qrcode library (must load before app.js) -->
   <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js" defer></script>
 
-  <!-- main app logic -->
+  <!-- main client logic -->
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -20,7 +20,6 @@
       <h1>QGHS Teacher Attendance</h1>
     </div>
     <nav class="top-nav">
-      <!-- these are just UI tabs (buttons show/hide sections) -->
       <button class="tab-btn" data-target="scanner">Scanner</button>
       <button class="tab-btn" data-target="attendance">Attendance</button>
       <button class="tab-btn" data-target="export">Export</button>
@@ -28,30 +27,33 @@
     </nav>
   </header>
 
-  <!-- subtle page alert for scan success / errors -->
+  <!-- small top alert for scan success / errors -->
   <div id="page-alert" class="page-alert" aria-hidden="true"></div>
 
   <main class="main-grid">
-    <!-- Scanner card -->
+    <!-- SCANNER -->
     <section id="scanner" class="tab-content active card">
       <h2>Scanner</h2>
-
       <div class="controls-row">
-        <label for="camera-select">Choose camera</label>
+        <label for="camera-select">Camera</label>
         <select id="camera-select" class="select"></select>
         <button id="start-camera" class="btn">Start Camera</button>
-        <button id="stop-camera" class="btn danger" disabled>Stop</button>
+        <button id="stop-camera" class="btn danger" disabled>Stop Camera</button>
       </div>
 
       <div id="reader" class="reader-box">
-        <!-- camera/video will render here by html5-qrcode -->
         <div class="scan-overlay"></div>
       </div>
 
-      <p class="muted">Tip: If you have a USB webcam, select it from the dropdown before starting.</p>
+      <div class="controls-row" style="margin-top:12px;">
+        <input id="manual-name" class="input" placeholder="(Optional) Enter name manually">
+        <button id="add-manual" class="btn">Add</button>
+      </div>
+
+      <p class="muted">Tip: If your USB webcam is connected, select it from the camera dropdown and click Start.</p>
     </section>
 
-    <!-- Attendance card -->
+    <!-- ATTENDANCE -->
     <section id="attendance" class="tab-content card">
       <h2>Attendance</h2>
 
@@ -60,7 +62,6 @@
           <div class="stat-title">Total Attendees</div>
           <div id="total-attendees" class="stat-value">0</div>
         </div>
-
         <div class="stat-card">
           <div class="stat-title">Attendance %</div>
           <div id="attendance-percent" class="stat-value">0%</div>
@@ -78,14 +79,14 @@
       </div>
     </section>
 
-    <!-- Export card -->
+    <!-- EXPORT -->
     <section id="export" class="tab-content card">
       <h2>Export</h2>
-      <p>Download the attendance as an Excel file (XLSX).</p>
+      <p>Click to download the attendance as an Excel file (XLSX).</p>
       <div class="controls-row">
         <button id="export-btn" class="btn success">Export to Excel</button>
       </div>
-      <p class="muted">Export uses the server endpoint <code>/export</code>. Make sure your server is running.</p>
+      <p class="muted">Note: export uses your server endpoint <code>/export</code>.</p>
     </section>
   </main>
 
