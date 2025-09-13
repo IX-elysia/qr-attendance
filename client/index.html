@@ -19,9 +19,18 @@
   <div class="container">
     <div class="card">
       <h2>QR Scanner</h2>
-      <div id="reader">
-        <div class="qr-focus"></div>
+
+      <!-- Camera selector -->
+      <div class="camera-select">
+        <label for="camera-select"><b>Select Camera:</b></label>
+        <select id="camera-select"></select>
       </div>
+
+      <!-- Scanner box -->
+      <div id="reader">
+        <div class="qr-guide"></div>
+      </div>
+
       <div id="scanner-controls">
         <button id="start-camera">Start Camera</button>
         <button id="stop-camera">Stop Camera</button>
