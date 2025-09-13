@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>QGHS Teacher Attendance - Scanner</title>
+  <title>QGHS Teacher Attendance - Attendance</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body>
   <header>QGHS Teacher Attendance</header>
@@ -18,14 +17,13 @@
 
   <div class="container">
     <div class="card">
-      <h2>QR Scanner</h2>
-      <div id="reader"></div>
+      <h2>Attendance List</h2>
+      <ul id="attendance-list"></ul>
       <br>
-      <button id="start-camera">Start Camera</button>
-      <button id="stop-camera">Stop Camera</button>
+      <button id="clear-list">Clear Attendance</button>
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script src="attendance.js"></script>
 </body>
 </html>

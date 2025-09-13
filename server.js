@@ -18,43 +18,21 @@ if (fs.existsSync(dataFile)) {
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "client")));
 
-// Main Scanner page
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "index.html"));
-});
-
-// QR Generator page
-app.get("/generator", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "generator.html"));
-});
-
-// (Optional) Export page — only if you want a separate UI
-app.get("/export-page", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "export.html"));
-});
-
 // Save attendance
 function saveAttendance() {
   fs.writeFileSync(dataFile, JSON.stringify(attendance, null, 2));
 }
 
 // Record attendance
-app.post("/attendance", (req, res) => {
+app.post("/api/attendance", (req, res) => {
   const { name } = req.body;
-
   const now = new Date();
-  const date = now.toLocaleDateString("en-PH", {
-    timeZone: "Asia/Manila",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
 
-  const time = now.toLocaleString("en-PH", {
+  const date = now.toLocaleDateString("en-PH", { timeZone: "Asia/Manila" });
+  const time = now.toLocaleTimeString("en-PH", {
     timeZone: "Asia/Manila",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: true,
   });
 
   const entry = { name, date, time };
@@ -64,20 +42,20 @@ app.post("/attendance", (req, res) => {
   res.json(entry);
 });
 
-// Get attendance list
-app.get("/attendance", (req, res) => {
+// Get attendance
+app.get("/api/attendance", (req, res) => {
   res.json(attendance);
 });
 
 // Clear attendance
-app.delete("/attendance", (req, res) => {
+app.delete("/api/attendance", (req, res) => {
   attendance = [];
   saveAttendance();
   res.sendStatus(200);
 });
 
-// Export attendance to Excel
-app.get("/export", async (req, res) => {
+// Export to Excel
+app.get("/api/export", async (req, res) => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Attendance");
 
@@ -87,9 +65,7 @@ app.get("/export", async (req, res) => {
     { header: "Time", key: "time", width: 15 },
   ];
 
-  attendance.forEach((record) => {
-    worksheet.addRow(record);
-  });
+  attendance.forEach(record => worksheet.addRow(record));
 
   res.setHeader(
     "Content-Disposition",
@@ -104,7 +80,6 @@ app.get("/export", async (req, res) => {
   res.end();
 });
 
-// Start server
 app.listen(PORT, () =>
-  console.log(`✅ Server running on http://localhost:${PORT}`)
+  console.log(`✅ Server running at http://localhost:${PORT}`)
 );

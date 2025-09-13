@@ -2,23 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Generator</title>
+  <title>QGHS Teacher Attendance - QR Generator</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>QGHS QR Generator</h1>
-  </header>
+  <header>QGHS Teacher Attendance</header>
 
-  <main class="generator-container">
-    <input type="text" id="qr-text" placeholder="Enter teacher name">
-    <button id="generate-btn">Generate QR</button>
-    <div id="qr-code"></div>
-    <button id="download-btn" style="display:none;">Download PNG</button>
-  </main>
+  <nav>
+    <a href="index.html"><button>📸 Scanner</button></a>
+    <a href="attendance.html"><button>👥 Attendance</button></a>
+    <a href="export.html"><button>📊 Export</button></a>
+    <a href="generator.html"><button>📝 QR Generator</button></a>
+  </nav>
 
-  <script src="generator.js" defer></script>
+  <div class="container">
+    <div class="card">
+      <h2>QR Code Generator</h2>
+      <input type="text" id="qr-text" placeholder="Enter text to generate QR" style="width:100%;padding:8px;">
+      <br><br>
+      <button id="generate-btn">Generate QR</button>
+      <br><br>
+      <canvas id="qr-canvas"></canvas>
+      <br><br>
+      <a id="download-link" style="display:none;" download="qrcode.png">Download PNG</a>
+    </div>
+  </div>
+
+  <script src="generator.js"></script>
 </body>
 </html>
