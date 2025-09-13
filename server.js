@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 
 let attendance = [];
 
-// Load saved attendance
+// --- Load saved attendance ---
 const dataFile = path.join(__dirname, "attendance.json");
 if (fs.existsSync(dataFile)) {
   attendance = JSON.parse(fs.readFileSync(dataFile));
@@ -18,17 +18,25 @@ if (fs.existsSync(dataFile)) {
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "client")));
 
-app.get("/export-page", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "export.html"));
+// --- Routes for pages ---
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "index.html")); // Scanner
 });
 
+app.get("/generator", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "generator.html")); // QR Generator
+});
 
-// Save attendance to JSON file
+app.get("/export-page", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "export.html")); // Export page
+});
+
+// --- Helper: Save attendance ---
 function saveAttendance() {
   fs.writeFileSync(dataFile, JSON.stringify(attendance, null, 2));
 }
 
-// Record attendance
+// --- Record attendance ---
 app.post("/attendance", (req, res) => {
   const { name } = req.body;
 
@@ -37,14 +45,14 @@ app.post("/attendance", (req, res) => {
     timeZone: "Asia/Manila",
     year: "numeric",
     month: "short",
-    day: "numeric"
+    day: "numeric",
   });
 
   const time = now.toLocaleString("en-PH", {
     timeZone: "Asia/Manila",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: true
+    hour12: true,
   });
 
   const entry = { name, date, time };
@@ -54,19 +62,19 @@ app.post("/attendance", (req, res) => {
   res.json(entry);
 });
 
-// Get attendance list
+// --- Get attendance list ---
 app.get("/attendance", (req, res) => {
   res.json(attendance);
 });
 
-// Clear attendance
+// --- Clear attendance ---
 app.delete("/attendance", (req, res) => {
   attendance = [];
   saveAttendance();
   res.sendStatus(200);
 });
 
-// Export attendance to Excel
+// --- Export attendance to Excel ---
 app.get("/export", async (req, res) => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet("Attendance");
@@ -74,10 +82,10 @@ app.get("/export", async (req, res) => {
   worksheet.columns = [
     { header: "Name", key: "name", width: 25 },
     { header: "Date", key: "date", width: 15 },
-    { header: "Time", key: "time", width: 15 }
+    { header: "Time", key: "time", width: 15 },
   ];
 
-  attendance.forEach(record => {
+  attendance.forEach((record) => {
     worksheet.addRow(record);
   });
 
@@ -94,29 +102,7 @@ app.get("/export", async (req, res) => {
   res.end();
 });
 
+// --- Start server ---
 app.listen(PORT, () =>
   console.log(`✅ Server running on http://localhost:${PORT}`)
 );
-
-const express = require("express");
-const path = require("path");
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-// Serve static files
-app.use(express.static(path.join(__dirname, "client")));
-
-// Main page (scanner)
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "index.html"));
-});
-
-// Generator page
-app.get("/generator", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "generator.html"));
-});
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
