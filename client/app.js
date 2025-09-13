@@ -1,61 +1,44 @@
 let html5QrCode;
 let lastScanTime = 0;
-const scanCooldown = 3000; // 3 seconds cooldown
-const TOTAL_TEACHERS = 50; // adjust for your roster
+const scanCooldown = 3000; // prevent double scan
 
 document.addEventListener("DOMContentLoaded", () => {
+  const cameraSelect = document.getElementById("camera-select");
   const startBtn = document.getElementById("start-camera");
   const stopBtn = document.getElementById("stop-camera");
   const exportBtn = document.getElementById("export-btn");
   const clearBtn = document.getElementById("clear-list");
   const refreshBtn = document.getElementById("refresh-list");
 
-  // Insert scanner overlay inside reader
-  const reader = document.getElementById("reader");
-  const scanBox = document.createElement("div");
-  scanBox.className = "scan-box";
-  reader.appendChild(scanBox);
-
-  // Alert banner
-  const alertBanner = document.createElement("div");
-  alertBanner.id = "scan-alert";
-  Object.assign(alertBanner.style, {
-    position: "fixed",
-    top: "20px",
-    left: "50%",
-    transform: "translateX(-50%)",
-    padding: "10px 20px",
-    backgroundColor: "maroon",
-    color: "white",
-    fontWeight: "bold",
-    borderRadius: "8px",
-    display: "none",
-    zIndex: "9999"
-  });
-  document.body.appendChild(alertBanner);
-
-  function showAlert(message) {
-    alertBanner.textContent = message;
-    alertBanner.style.display = "block";
-    setTimeout(() => (alertBanner.style.display = "none"), 2000);
-  }
-
-  // Load saved attendance
-  loadAttendance();
+  // Load available cameras
+  Html5Qrcode.getCameras().then(devices => {
+    devices.forEach(device => {
+      const option = document.createElement("option");
+      option.value = device.id;
+      option.text = device.label || `Camera ${cameraSelect.length + 1}`;
+      cameraSelect.appendChild(option);
+    });
+  }).catch(err => console.error("Camera fetch failed:", err));
 
   // Start Camera
   startBtn.addEventListener("click", () => {
+    const cameraId = cameraSelect.value;
+    if (!cameraId) {
+      alert("Please select a camera first!");
+      return;
+    }
+
     if (!html5QrCode) {
       html5QrCode = new Html5Qrcode("reader");
     }
+
     html5QrCode.start(
-      { facingMode: "environment" },
-      { fps: 10, qrbox: { width: 250, height: 250 } },
+      cameraId,
+      { fps: 10, qrbox: 250 },
       qrCodeMessage => {
         const now = Date.now();
         if (now - lastScanTime > scanCooldown) {
           recordAttendance(qrCodeMessage);
-          showAlert(`✅ Scanned: ${qrCodeMessage}`);
           lastScanTime = now;
         }
       }
@@ -65,89 +48,65 @@ document.addEventListener("DOMContentLoaded", () => {
   // Stop Camera
   stopBtn.addEventListener("click", () => {
     if (html5QrCode) {
-      html5QrCode.stop()
-        .then(() => console.log("Camera stopped"))
-        .catch(err => console.error("Stop failed:", err));
+      html5QrCode.stop().then(() => {
+        console.log("Camera stopped");
+      }).catch(err => console.error("Stop failed:", err));
     }
   });
 
-  // Refresh List
+  // Refresh List (fetch from backend)
   refreshBtn.addEventListener("click", () => {
     loadAttendance();
   });
 
-  // Clear List
-  clearBtn.addEventListener("click", () => {
-    document.getElementById("attendance-list").innerHTML = "";
-    localStorage.removeItem("attendance");
-    updateStats();
+  // Clear List (backend + frontend)
+  clearBtn.addEventListener("click", async () => {
+    await fetch("/attendance", { method: "DELETE" });
+    loadAttendance();
   });
 
-  // ✅ Export to Excel
+  // Export Attendance
   exportBtn.addEventListener("click", () => {
-    const attendance = getAttendance();
-    if (attendance.length === 0) {
-      alert("No attendance data to export!");
-      return;
-    }
-
-    const ws_data = [["Name", "Time"]];
-    attendance.forEach(entry => {
-      ws_data.push([entry.name, entry.time]);
-    });
-
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.aoa_to_sheet(ws_data);
-    XLSX.utils.book_append_sheet(wb, ws, "Attendance");
-
-    XLSX.writeFile(wb, "attendance.xlsx");
+    window.location.href = "/export";
   });
+
+  // Load attendance on page load
+  loadAttendance();
 });
 
 // --- Attendance ---
-function recordAttendance(name) {
-  const attendance = getAttendance();
-  attendance.push({
-    name,
-    time: new Date().toLocaleTimeString()
+async function recordAttendance(name) {
+  const res = await fetch("/attendance", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name })
   });
-  localStorage.setItem("attendance", JSON.stringify(attendance));
-  renderAttendance(attendance);
-}
-
-function loadAttendance() {
-  const attendance = getAttendance();
-  renderAttendance(attendance);
-}
-
-function renderAttendance(attendance) {
-  const list = document.getElementById("attendance-list");
-  list.innerHTML = "";
-  attendance.forEach(entry => {
-    const item = document.createElement("li");
-    item.textContent = `${entry.name} - Recorded at ${entry.time}`;
-    list.appendChild(item);
-  });
+  const data = await res.json();
+  addToList(data);
   updateStats();
 }
 
-function getAttendance() {
-  return JSON.parse(localStorage.getItem("attendance")) || [];
+async function loadAttendance() {
+  const res = await fetch("/attendance");
+  const data = await res.json();
+  const list = document.getElementById("attendance-list");
+  list.innerHTML = "";
+  data.forEach(entry => addToList(entry));
+  updateStats();
+}
+
+function addToList(entry) {
+  const list = document.getElementById("attendance-list");
+  const item = document.createElement("li");
+  item.textContent = `${entry.name} - ${entry.date} at ${entry.time}`;
+  list.appendChild(item);
 }
 
 function updateStats() {
-  const totalScanned = getAttendance().length;
-  const percent = TOTAL_TEACHERS > 0 ? ((totalScanned / TOTAL_TEACHERS) * 100).toFixed(1) : 0;
-
-  document.getElementById("total-attendees").textContent = totalScanned;
-  document.getElementById("attendance-percent").textContent = `${percent}%`;
-}
-
-// --- Tab navigation ---
-document.querySelectorAll(".tab-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab-content").forEach(sec => sec.classList.remove("active"));
-    const target = btn.getAttribute("data-target");
-    document.getElementById(target).classList.add("active");
+  fetch("/attendance").then(res => res.json()).then(data => {
+    const total = data.length;
+    const percent = total > 0 ? Math.round((total / 50) * 100) : 0; // Example: out of 50 teachers
+    document.getElementById("total-attendees").textContent = total;
+    document.getElementById("average-percent").textContent = percent + "%";
   });
-});
+}

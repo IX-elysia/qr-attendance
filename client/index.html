@@ -1,59 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QGHS Teacher Attendance</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://unpkg.com/html5-qrcode" defer></script>
-  <script src="app.js" defer></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
 <body>
-  <header>
+  <div class="container">
     <h1>QGHS Teacher Attendance</h1>
-    <nav>
-      <button class="tab-btn" data-target="scan">Scan</button>
-      <button class="tab-btn" data-target="attendance">Attendance</button>
-      <button class="tab-btn" data-target="export">Export</button>
-    </nav>
-  </header>
 
-  <main>
-    <!-- Scan Section -->
-    <section id="scan" class="tab-content active">
-      <h2>Scan QR Code</h2>
-      <div id="reader"></div>
-      <div class="button-group">
-        <button id="start-camera">Start Camera</button>
-        <button id="stop-camera">Stop Camera</button>
-      </div>
-    </section>
+    <!-- Camera Controls -->
+    <div class="controls">
+      <label for="camera-select">🎥 Choose Camera:</label>
+      <select id="camera-select"></select>
+      <button id="start-camera">Start Camera</button>
+      <button id="stop-camera">Stop Camera</button>
+    </div>
 
-    <!-- Attendance Section -->
-    <section id="attendance" class="tab-content">
-      <h2>Attendance List</h2>
-      <div class="stats-container">
-        <div class="stats-box">
-          <h3>Total Attendees</h3>
-          <p id="total-attendees">0</p>
-        </div>
-        <div class="stats-box">
-          <h3>Attendance %</h3>
-          <p id="attendance-percent">0%</p>
-        </div>
-      </div>
-      <ul id="attendance-list"></ul>
-      <div class="button-group">
-        <button id="refresh-list">Refresh List</button>
-        <button id="clear-list">Clear List</button>
-      </div>
-    </section>
+    <!-- Scanner Box -->
+    <div id="reader"></div>
 
-    <!-- Export Section -->
-    <section id="export" class="tab-content">
-      <h2>Export Data</h2>
-      <button id="export-btn">Export to Excel</button>
-    </section>
-  </main>
+    <!-- Stats Section -->
+    <div class="stats">
+      <div class="stat-box">
+        <h2>Total Attendees</h2>
+        <p id="total-attendees">0</p>
+      </div>
+      <div class="stat-box">
+        <h2>Average %</h2>
+        <p id="average-percent">0%</p>
+      </div>
+    </div>
+
+    <!-- Attendance List -->
+    <h2>Attendance List</h2>
+    <ul id="attendance-list"></ul>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button id="refresh-list">🔄 Refresh</button>
+      <button id="clear-list">🗑️ Clear</button>
+      <button id="export-btn">📥 Export</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
