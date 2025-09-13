@@ -1,59 +1,38 @@
-let qrCode = null;
-const generateBtn = document.getElementById("generate-btn");
-const downloadBtn = document.getElementById("download-btn");
-const historyEl = document.getElementById("history");
-const previewEl = document.getElementById("qr-preview");
+// generator.js — small, safe QR generator
+document.addEventListener("DOMContentLoaded", () => {
+  const genBtn = document.getElementById("generate-qr");
+  const downBtn = document.getElementById("download-qr");
+  const preview = document.getElementById("qr-preview");
+  const input = document.getElementById("qr-input");
+  let lastImgSrc = null;
 
-generateBtn.addEventListener("click", () => {
-  const name = document.getElementById("teacher-name").value.trim();
-  if (!name) {
-    alert("Please enter a name!");
-    return;
-  }
-
-  // Clear old QR
-  previewEl.innerHTML = "";
-
-  // Generate QR
-  qrCode = new QRCode(previewEl, {
-    text: name,
-    width: 200,
-    height: 200,
-    colorDark: "#800000",
-    colorLight: "#ffffff",
+  genBtn.addEventListener("click", () => {
+    const text = input.value.trim();
+    if (!text) return alert("Please enter text to generate QR");
+    preview.innerHTML = ""; // clear
+    // QRCode.js writes a <img> or <canvas>
+    new QRCode(preview, { text, width: 220, height: 220, colorDark: "#7b0000", colorLight: "#ffffff" });
+    setTimeout(() => {
+      const img = preview.querySelector("img");
+      if (img) {
+        lastImgSrc = img.src;
+        downBtn.disabled = false;
+      } else {
+        // sometimes QR is canvas
+        const canvas = preview.querySelector("canvas");
+        if (canvas) {
+          lastImgSrc = canvas.toDataURL("image/png");
+          downBtn.disabled = false;
+        }
+      }
+    }, 300);
   });
 
-  // Enable download
-  setTimeout(() => {
-    downloadBtn.disabled = false;
-
-    // Save in history
-    addToHistory(name, previewEl.querySelector("img").src);
-  }, 500);
+  downBtn.addEventListener("click", () => {
+    if (!lastImgSrc) return;
+    const a = document.createElement("a");
+    a.href = lastImgSrc;
+    a.download = `qrcode.png`;
+    a.click();
+  });
 });
-
-// Download QR
-downloadBtn.addEventListener("click", () => {
-  if (!qrCode) return;
-  const img = previewEl.querySelector("img");
-  const link = document.createElement("a");
-  link.href = img.src;
-  link.download = "qghs_qr.png";
-  link.click();
-});
-
-// Add to history
-function addToHistory(name, src) {
-  const item = document.createElement("div");
-  item.classList.add("history-item");
-  item.innerHTML = `
-    <img src="${src}" alt="QR for ${name}">
-    <p>${name}</p>
-  `;
-  historyEl.prepend(item);
-
-  // Keep last 5
-  if (historyEl.children.length > 5) {
-    historyEl.removeChild(historyEl.lastChild);
-  }
-}
