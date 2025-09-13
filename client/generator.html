@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Generator</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QGHS QR Generator</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script defer>
-    document.addEventListener("DOMContentLoaded", () => {
-      const generateBtn = document.getElementById("generate-btn");
-      const qrCanvas = document.getElementById("qr-canvas");
-      const nameInput = document.getElementById("teacher-name");
-
-      generateBtn.addEventListener("click", () => {
-        const name = nameInput.value.trim();
-        if (!name) {
-          alert("Please enter a teacher's name.");
-          return;
-        }
-        QRCode.toCanvas(qrCanvas, name, { width: 200 }, err => {
-          if (err) console.error(err);
-        });
-      });
-    });
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js" defer></script>
+  <script src="generator.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>QR Code Generator</h1>
-  </header>
-  <main>
-    <div class="card">
-      <h2>Create a QR Code</h2>
-      <input type="text" id="teacher-name" placeholder="Enter teacher name">
-      <button id="generate-btn">Generate QR</button>
-      <canvas id="qr-canvas"></canvas>
+  <header class="site-header">
+    <div class="header-left">
+      <h1>QGHS • QR Generator</h1>
     </div>
+    <nav class="top-nav">
+      <a class="nav-link" href="/">Scanner</a>
+      <a class="nav-link" href="/generator">Generator</a>
+    </nav>
+  </header>
+
+  <main class="generator-grid">
+    <section class="card generator-card">
+      <h2>Create a QR</h2>
+      <input id="qr-input" class="input" placeholder="Enter teacher name or text">
+      <div class="controls-row">
+        <button id="generate-qr" class="btn success">Generate</button>
+        <button id="download-qr" class="btn" disabled>Download PNG</button>
+      </div>
+    </section>
+
+    <section class="card generator-preview">
+      <h2>Preview</h2>
+      <div id="qr-preview" class="qr-box"></div>
+      <div id="history" class="history-grid"></div>
+    </section>
   </main>
+
+  <footer class="site-footer"><small>QGHS QR Generator</small></footer>
 </body>
 </html>

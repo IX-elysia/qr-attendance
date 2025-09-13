@@ -1,5 +1,5 @@
-// app.js — scanner + attendance (uses server endpoints /attendance, /export, DELETE /attendance)
-const TOTAL_TEACHERS = 50; // adjust to your roster size
+// app.js — restored stable behavior + camera selection + scan cooldown + UI wiring
+const TOTAL_TEACHERS = 50; // change if needed
 
 let html5QrCode = null;
 let lastScanTime = 0;
@@ -14,8 +14,8 @@ function showAlert(msg, ms = 2000) {
   setTimeout(() => a.style.display = "none", ms);
 }
 
-// TAB NAV
 document.addEventListener("DOMContentLoaded", () => {
+  // Tab buttons
   document.querySelectorAll(".tab-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // wire up controls
   const cameraSelect = document.getElementById("camera-select");
   const startBtn = document.getElementById("start-camera");
   const stopBtn = document.getElementById("stop-camera");
@@ -32,27 +31,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearBtn = document.getElementById("clear-list");
   const exportBtn = document.getElementById("export-btn");
 
-  // populate camera dropdown
+  // populate cameras
   if (window.Html5Qrcode && Html5Qrcode.getCameras) {
-    Html5Qrcode.getCameras().then(devs => {
-      cameras = devs || [];
-      cameraSelect.innerHTML = "";
-      if (!cameras.length) {
-        const opt = document.createElement("option"); opt.text = "No camera found"; opt.value = "";
-        cameraSelect.appendChild(opt);
-      } else {
-        cameras.forEach((d, i) => {
-          const opt = document.createElement("option");
-          opt.value = d.id;
-          opt.text = d.label || `Camera ${i+1}`;
+    Html5Qrcode.getCameras()
+      .then(devs => {
+        cameras = devs || [];
+        cameraSelect.innerHTML = "";
+        if (!cameras.length) {
+          const opt = document.createElement("option"); opt.text = "No camera found"; opt.value = "";
           cameraSelect.appendChild(opt);
-        });
-      }
-    }).catch(err => {
-      console.warn("getCameras failed", err);
-      const opt = document.createElement("option"); opt.text = "No camera access"; opt.value = "";
-      cameraSelect.appendChild(opt);
-    });
+        } else {
+          cameras.forEach((d, i) => {
+            const opt = document.createElement("option");
+            opt.value = d.id;
+            opt.text = d.label || `Camera ${i+1}`;
+            cameraSelect.appendChild(opt);
+          });
+        }
+      })
+      .catch(err => {
+        console.warn("getCameras failed", err);
+        const opt = document.createElement("option"); opt.text = "No camera access"; opt.value = "";
+        cameraSelect.appendChild(opt);
+      });
   } else {
     const opt = document.createElement("option"); opt.text = "Camera library not loaded"; opt.value = "";
     cameraSelect.appendChild(opt);
@@ -63,7 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const selected = document.getElementById("camera-select").value;
     if (!selected) { showAlert("Please select a camera first"); return; }
 
-    // ensure only one instance
     if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
 
     try {
@@ -77,9 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
             onScanned(decoded);
           }
         },
-        (err) => {
-          // scan failure callback (ignored)
-        }
+        (err) => { /* scan failure callback (ignored) */ }
       );
       startBtn.disabled = true;
       stopBtn.disabled = false;
@@ -109,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Refresh attendance
   refreshBtn.addEventListener("click", loadAttendance);
 
-  // Clear attendance — server delete
+  // Clear attendance
   clearBtn.addEventListener("click", async () => {
     if (!confirm("Clear all attendance?")) return;
     try {
@@ -122,18 +120,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Export
+  // Export button
   exportBtn.addEventListener("click", () => {
     window.location.href = "/export";
   });
+
+  // Manual input (If you still have manual input in your index, keep this)
+  const addManual = document.getElementById("add-manual");
+  if (addManual) {
+    addManual.addEventListener("click", () => {
+      const nameField = document.getElementById("manual-name");
+      const name = nameField ? nameField.value.trim() : "";
+      if (!name) { showAlert("Enter a name"); return; }
+      // send to server
+      fetch("/attendance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name })
+      }).then(res => res.json()).then(entry => {
+        addListEntry(entry);
+        updateStatsUI();
+        if (nameField) nameField.value = "";
+        showAlert(`Added: ${entry.name}`);
+      }).catch(e => { console.error(e); showAlert("Failed to add"); });
+    });
+  }
 
   // initial load
   loadAttendance();
 });
 
-// when a QR code is scanned
+// on scanned - post to server
 function onScanned(decodedText) {
-  // POST to server
   fetch("/attendance", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -144,17 +162,17 @@ function onScanned(decodedText) {
       return r.json();
     })
     .then(entry => {
-      showAlert(`Scanned: ${entry.name}`, 1800);
+      showAlert(`Scanned: ${entry.name}`, 1600);
       addListEntry(entry);
       updateStatsUI();
     })
     .catch(err => {
       console.error("save scan error", err);
-      showAlert("Failed to save scan", 2000);
+      showAlert("Failed to save scan");
     });
 }
 
-// load attendance from server and render
+// load attendance and render list
 async function loadAttendance() {
   try {
     const res = await fetch("/attendance");
@@ -166,21 +184,20 @@ async function loadAttendance() {
     updateStatsUI(data);
   } catch (err) {
     console.error("loadAttendance error", err);
-    showAlert("Could not load attendance", 2000);
+    showAlert("Could not load attendance");
   }
 }
 
-// add single list entry (expects {name,date,time})
+// add a single list entry
 function addListEntry(entry) {
   const ul = document.getElementById("attendance-list");
   const li = document.createElement("li");
   li.textContent = `${entry.name} — ${entry.date} ${entry.time}`;
-  ul.prepend(li); // newest on top
+  ul.prepend(li); // newest first
 }
 
-// update stats UI (count + percent)
+// update stats UI (optionally pass data)
 function updateStatsUI(forceData) {
-  // if forceData passed, use it; else fetch latest
   if (forceData) {
     const total = forceData.length;
     document.getElementById("total-attendees").textContent = total;
@@ -188,7 +205,6 @@ function updateStatsUI(forceData) {
     document.getElementById("attendance-percent").textContent = `${percent}%`;
     return;
   }
-
   fetch("/attendance").then(r => r.json()).then(data => {
     const total = data.length;
     document.getElementById("total-attendees").textContent = total;
