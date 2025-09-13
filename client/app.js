@@ -1,45 +1,50 @@
 let html5QrCode;
-let lastScanTime = 0;
-const scanCooldown = 3000; // 3s cooldown
+let isScanning = false;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const startBtn = document.getElementById("start-camera");
-  const stopBtn = document.getElementById("stop-camera");
+const startBtn = document.getElementById("start-camera");
+const stopBtn = document.getElementById("stop-camera");
 
-  startBtn.addEventListener("click", async () => {
-    if (!html5QrCode) {
-      html5QrCode = new Html5Qrcode("reader");
-    }
+async function startCamera() {
+  if (isScanning) return;
 
-    try {
-      const devices = await Html5Qrcode.getCameras();
-      const cameraId = devices.length > 1 ? devices[1].id : devices[0].id;
+  html5QrCode = new Html5Qrcode("reader");
 
+  try {
+    const devices = await Html5Qrcode.getCameras();
+    if (devices && devices.length) {
       await html5QrCode.start(
-        { deviceId: { exact: cameraId } },
+        { facingMode: "environment" },
         { fps: 10, qrbox: 250 },
-        async decodedText => {
-          const now = Date.now();
-          if (now - lastScanTime > scanCooldown) {
-            await fetch("/api/attendance", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ name: decodedText }),
-            });
-            alert(`✅ Scanned: ${decodedText}`);
-            lastScanTime = now;
-          }
+        async (decodedText) => {
+          console.log("Scanned:", decodedText);
+
+          // Send to backend
+          await fetch("/api/attendance", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: decodedText }),
+          });
+
+          alert("✅ Scanned: " + decodedText);
         }
       );
-    } catch (err) {
-      console.error("Camera start failed:", err);
-      alert("❌ Unable to start camera");
+      isScanning = true;
+    } else {
+      alert("No cameras found.");
     }
-  });
+  } catch (err) {
+    console.error("Camera error:", err);
+    alert("Could not start camera.");
+  }
+}
 
-  stopBtn.addEventListener("click", async () => {
-    if (html5QrCode) {
-      await html5QrCode.stop();
-    }
-  });
-});
+async function stopCamera() {
+  if (html5QrCode && isScanning) {
+    await html5QrCode.stop();
+    html5QrCode.clear();
+    isScanning = false;
+  }
+}
+
+startBtn.addEventListener("click", startCamera);
+stopBtn.addEventListener("click", stopCamera);
